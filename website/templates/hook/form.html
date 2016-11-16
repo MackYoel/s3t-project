@@ -1,0 +1,36 @@
+{% extends 'main/layout.html' %}
+{% load i18n %}
+{% block body %}
+
+<div class = "row">
+<div class = "col-md-2"></div>
+
+<div class = "col-md-8">
+    <h1>{{title}}</h1>
+    <hr>
+    <form action="." method="post" class="form-horizontal">
+
+        {% csrf_token %}
+        {% for f in form %}
+            <div class="form-group {% if f.errors %}has-error{% endif %}">
+                <label for="id_{{f.name}}" class="col-sm-2 control-label">{{ f.label }}</label>
+                <div class="col-sm-10">
+                    {{ f }}
+                    {% for error in f.errors %}
+                        <p class="help-block">{{ error }}</p>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+        <div class= "pull-right">
+        <input type="submit" class="btn btn-primary" class="pull-right" value="{{save_text|default:'Save'}}" name="_save">
+        </div>
+    </form>
+
+</div>
+<div class = "col-md-2"></div>
+
+</div>
+
+
+{% endblock %}
