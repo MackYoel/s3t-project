@@ -1,0 +1,11 @@
+{% extends 'main/layout.html' %}
+{% load bit_extras %}
+{% load i18n %}
+{% load static %}
+{% block more_styles %}
+{% endblock %}
+{% block body %}
+<span class="text-center">
+    <h3 class="home_subtitle">{{ message|safe }}</h3>
+</span>
+{% endblock %}

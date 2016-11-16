@@ -1,0 +1,48 @@
+{% extends 'main/layout.html' %}
+{% load i18n %}
+{% load static %}
+{% block more_styles %}
+{% endblock %}
+{% block nav %}
+{% endblock%}
+
+{% block body %}
+
+<section class="contact-container">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-4">
+            </div>
+            <div class="col-sm-3">
+            </div>
+            
+            <div  style="color:#0000FF" class="col-sm-6">
+
+                <br>
+                <br>
+                <br>
+                <h4 class="uppercase mb16" style="margin-top:20px">
+                    {% trans 'Please, login to continue' %}
+                </h4>
+                {% if form.errors %}
+                <span class="help-block">{{ form.non_field_errors }}</span>
+                {% endif %}
+
+                <form action="." method="post">
+                    {% csrf_token %}
+                    {% for field in form %}
+                    {% include 'main/hook/field_with_label.html' with field=field %}
+                    {% endfor %}
+                    <input type="submit" value="{% trans 'login'|capfirst %}">
+                    <a href="{% url 'accounts:password_reset' %}">{% trans 'Reset password' %}</a>
+
+                </form>
+
+
+            </div>
+        </div>
+        <!--end of row-->
+    </div>
+    <!--end of container-->
+</section>
+{% endblock %}

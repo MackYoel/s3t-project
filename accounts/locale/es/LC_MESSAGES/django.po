@@ -1,0 +1,193 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-10-06 23:16+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: forms.py:11
+msgid "Change password"
+msgstr "Cambiar contraseña"
+
+#: forms.py:11 forms.py:35
+msgid "Save"
+msgstr "Guardar"
+
+#: forms.py:25 forms.py:35 templates/accounts/login.html:37 views.py:44
+msgid "Reset password"
+msgstr "Recuperar contraseña"
+
+#: forms.py:25
+msgid "Reset"
+msgstr "Recuperar"
+
+#: forms.py:49
+msgid "email"
+msgstr "correo electrónico"
+
+#: models.py:11
+msgid "man"
+msgstr "masculino"
+
+#: models.py:12
+msgid "woman"
+msgstr "femenino"
+
+#: models.py:18
+msgid "sex"
+msgstr "sexo"
+
+#: templates/accounts/email/email_reset.html:3
+#: templates/accounts/email/email_reset.txt:3
+#, python-format
+msgid ""
+"You're receiving this e-mail because you requested a password reset\n"
+"        for your user account at %(site_name)s"
+msgstr ""
+"Estas recibiendo este correo porque se solicito restaurar su contraseña\n"
+"        para tu cuenta en %(site_name)s"
+
+#: templates/accounts/email/email_reset.html:6
+#: templates/accounts/email/email_reset.txt:6
+msgid "Please go to the following page and choose a new password:"
+msgstr "Porfavor, ve a la siguiente pagina y escoge una nueva contraseña"
+
+#: templates/accounts/email/email_reset.html:10
+#: templates/accounts/email/email_reset.txt:10
+msgid "Your username, in case you've forgotten:"
+msgstr "Tu username, en caso de haberlo olvidado"
+
+#: templates/accounts/email/email_reset.html:12
+#: templates/accounts/email/email_reset.txt:12
+msgid "Thanks for using our site!"
+msgstr "Gracias por registrarte en nuestra app"
+
+#: templates/accounts/email/email_reset.html:14
+#: templates/accounts/email/email_reset.txt:14
+#, python-format
+msgid "The %(site_name)s team"
+msgstr "El equipo %(site_name)s"
+
+#: templates/accounts/login.html:25
+msgid "Please, login to continue"
+msgstr "Porfavor, ingresa para continuar"
+
+#: templates/accounts/login.html:36
+msgid "login"
+msgstr "ingresar"
+
+#: templates/accounts/password_reset.html:17
+msgid "You are logged like "
+msgstr "Haz iniciado sesión como "
+
+#: templates/accounts/password_reset.html:54
+#, fuzzy
+#| msgid "login"
+msgid "Login"
+msgstr "ingresar"
+
+#: templates/accounts/password_reset.html:56
+#, fuzzy
+#| msgid "Reset password"
+msgid "Reset Password"
+msgstr "Recuperar contraseña"
+
+#: urls.py:17
+msgid "Log in"
+msgstr "Iniciar sesión"
+
+#: views.py:24
+msgid ""
+"<strong>We have sent you an email!</strong> Please, follow the instructions "
+"to reset your password."
+msgstr ""
+"<strong>¡Te hemos enviado un correo</strong> Por favor, sigue las "
+"instrucciones para recuperar tu contraseña."
+
+#: views.py:31 views.py:36
+msgid "<strong>Success!</strong> You have changed your password."
+msgstr "<strong>¡Éxito!</strong> Has cambiado tu contraseña."
+
+#~ msgid "create new user"
+#~ msgstr "crear un nuevo usuario"
+
+#~ msgid "Create new user"
+#~ msgstr "crear nuevo usuario"
+
+#~ msgid "this email is already registered"
+#~ msgstr "este correo ya esta registrado"
+
+#~ msgid "contact"
+#~ msgstr "contacto"
+
+#~ msgid "order"
+#~ msgstr "orden"
+
+#~ msgid "alternative email"
+#~ msgstr "correo opcional"
+
+#~ msgid "dni"
+#~ msgstr "dni"
+
+#~ msgid "phone number"
+#~ msgstr "teléfono"
+
+#~ msgid "photo"
+#~ msgstr "foto"
+
+#~ msgid "gender"
+#~ msgstr "genero"
+
+#~ msgid "address"
+#~ msgstr "dirección"
+
+#~ msgid "birth date"
+#~ msgstr "fecha de cumpleaños"
+
+#~ msgid "facebook"
+#~ msgstr "facebook"
+
+#~ msgid "linkedin"
+#~ msgstr "linkedin"
+
+#~ msgid "twitter"
+#~ msgstr "twitter"
+
+#~ msgid "website"
+#~ msgstr "sitio web"
+
+#~ msgid "Edit profile"
+#~ msgstr "Editar perfil"
+
+#~| msgid "Please, login to continue"
+#~ msgid "Please Admin, login to continue"
+#~ msgstr "Porfavor, ingresa para continuar"
+
+#~ msgid "or register on"
+#~ msgstr "o registrarse en"
+
+#~ msgid "or I'm Admin"
+#~ msgstr "o Soy un Admin"
+
+#~ msgid "or I'm a simple mortal"
+#~ msgstr "o Soy un simple mortal"
+
+#~| msgid "Reset password"
+#~ msgid "Reset your password"
+#~ msgstr "Recuperar contraseña"
+
+#~ msgid "<strong>Success!</strong>panel has been deleted."
+#~ msgstr "<strong>¡Éxito</strong> Has actualizado tu perfil."

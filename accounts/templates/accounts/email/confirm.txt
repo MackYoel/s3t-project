@@ -1,0 +1,6 @@
+Welcome {{ first_name }} to Activa
+Please go to {{url}} link to confirm your email
+
+you can get into http://activatu.com with this credentials:
+    username: {{ username }}
+    password: {{ password }}
