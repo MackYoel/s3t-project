@@ -1,0 +1,45 @@
+{% extends "website/layout.html" %}
+{% load static %}
+
+{% block menu-content %}
+<h1>Mis Productos</h1>
+<a href="{% url 'new_product' %}">
+    <button type="button" class="btn btn-primary">Agregar producto</button>
+</a>
+
+<br><br>
+<table class="table">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Habilitado</th>
+            <th>Imagen</th>
+            <th>Nombre</th>
+            <th>Talla</th>
+            <th>Colores</th>
+            <th>Precio</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+        <tbody>
+            {% for p in providers %}
+                <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    {% if p.is_active %}
+                        <td>Si</td>
+                    {% else %}
+                        <td>No</td>
+                    {% endif %}
+                    <td>{{p.first_name}} {{p.last_name}}</td>
+                    <td>{{p.email}}</td>
+                    <td>{{p.balance}}</td>
+                    <td>{{p.phone_number|default:"--"}}</td>
+                    <td>{{ p.ruc|default_if_none:"--" }}</td>
+                    <td>{{p.account_number|default:"--"}}</td>
+                    <td>{{p.bank|default:"--"}}</td>
+                    <td><a href="{% url 'edit_provider' p.pk %}">editar</a> - <a href="{% url 'products' %}?provider={{p.pk}}">ver prods</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

@@ -4,7 +4,7 @@ from django.forms import ModelForm
 from django.utils.translation import ugettext as _
 
 from accounts.models import Person
-from main.functions import add_form_control_class
+from website.functions import add_form_control_class, update_form_labels
 
 
 class PasswordChangeFormEdited(PasswordChangeForm):
@@ -48,3 +48,28 @@ class AuthenticationFormEdited(AuthenticationForm):
         super(AuthenticationFormEdited, self).__init__(*args, **kwargs)
         self.fields['username'].label = _('email')
         add_form_control_class(self.fields)
+
+
+class PersonForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        add_form_control_class(self.fields)
+        labels = {
+            'first_name': 'Nombres *',
+            'last_name': 'Apellidos *',
+            'email': 'Email',
+            'balance': 'Saldo',
+            'phone_number': 'Celular',
+            'account_number': 'Nro de cuenta',
+            'bank': 'Banco',
+        }        
+        update_form_labels(self, labels)
+
+        self.fields['first_name'].widget.attrs.update({'required': True})
+        self.fields['last_name'].widget.attrs.update({'required': True})
+        self.fields['email'].widget.attrs.update({'required': True})
+
+    class Meta:
+        model = Person
+        fields = ('first_name', 'last_name', 'email',
+                  'balance', 'phone_number', 'ruc', 'account_number', 'bank', 'is_active')

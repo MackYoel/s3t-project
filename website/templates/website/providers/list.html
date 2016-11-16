@@ -1,0 +1,47 @@
+{% extends "website/layout.html" %}
+{% load static %}
+
+{% block menu-content %}
+<h1>Proveedores</h1>
+<a href="{% url 'new_provider' %}">
+    <button type="button" class="btn btn-primary">Agregar proveedor</button>
+</a>
+
+<br><br>
+<table class="table">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Habilitado</th>
+            <th>Nombres y Apellidos</th>
+            <th>Email</th>
+            <th>Saldo</th>
+            <th>Celular</th>
+            <th>Nro de Ruc</th>
+            <th>Nro de Cuenta</th>
+            <th>Agencia</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+        <tbody>
+            {% for p in providers %}
+                <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    {% if p.is_active %}
+                        <td>Si</td>
+                    {% else %}
+                        <td>No</td>
+                    {% endif %}
+                    <td>{{p.first_name}} {{p.last_name}}</td>
+                    <td>{{p.email}}</td>
+                    <td>{{p.balance}}</td>
+                    <td>{{p.phone_number|default:"--"}}</td>
+                    <td>{{ p.ruc|default_if_none:"--" }}</td>
+                    <td>{{p.account_number|default:"--"}}</td>
+                    <td>{{p.bank|default:"--"}}</td>
+                    <td><a href="{% url 'edit_provider' p.pk %}">editar</a> - <a href="{% url 'products' %}?provider={{p.pk}}">ver prods</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
