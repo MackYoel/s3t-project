@@ -25,7 +25,7 @@ def new_provider(request):
         form = PersonForm(request.POST)
         if form.is_valid():
             person = form.save(commit=False)
-            person.username = generate_username(person.first_name)
+            person.username = person.email
             token = create_unique_token()
             msg = 'Por favor haga <a href="{}{}">click aqui</a> para asignar una contraseña a su cuenta.'
             msg = msg.format(DOMAIN_NAME, reverse('set_password_provider', kwargs={'token': token}))
