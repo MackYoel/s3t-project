@@ -91,7 +91,6 @@ def login_view(request):
         if user is not None:
             login(request, user)
             return redirect(LOGIN_REDIRECT_URL)
-
         form = AuthenticationFormEdited(initial={'username': username})
     else:
         form = AuthenticationFormEdited()
