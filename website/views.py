@@ -84,7 +84,7 @@ def new_product(request):
         form = ProductForm(request.POST)
         if form.is_valid():
             product = form.save(commit=False)
-            product.provider = Person(user_ptr_id=request.user.pk)
+            product.provider = request.user.person
             product.save()
             return redirect(reverse('products'))
         else:

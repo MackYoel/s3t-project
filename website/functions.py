@@ -56,12 +56,12 @@ def update_form_labels(form, fields):
 
 def send_email(subject=None, from_email=None, to_email=None, content=None):
     """Returns the error (string) if there is any, None otherwise"""
-    if SEND_GRID_API_KEY is None:
-        return 'SEND_GRID_API_KEY is not setted up.'
+    if SENDGRID_KEY is None:
+        return 'SENDGRID_KEY is not setted up.'
     if None in (subject, from_email, to_email, content):
         return 'subject, from_email, to_email, content are required.'
 
-    sg = sendgrid.SendGridAPIClient(apikey=SEND_GRID_API_KEY)
+    sg = sendgrid.SendGridAPIClient(apikey=SENDGRID_KEY)
     mail = Mail(
         Email(from_email),
         subject,
@@ -71,8 +71,6 @@ def send_email(subject=None, from_email=None, to_email=None, content=None):
     try:
         resp = sg.client.mail.send.post(request_body=mail.get())
     except Exception as err:
-        from toctochi_stereo import pprint
-        pprint(err, label='err')
         return err
 
     if resp.status_code == 202:
