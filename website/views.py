@@ -5,6 +5,7 @@ from django.urls import reverse
 from django.http import HttpResponse
 from website.functions import send_email, create_unique_token
 from s3t.settings import DOMAIN_NAME
+from website.forms import ProductForm
 
 
 def home(request):
@@ -78,4 +79,17 @@ def set_password_provider(request, token):
 
 
 def new_product(request):
-    pass
+    comeback_to = 'products'
+    if request.method == 'POST' and request.POST:
+        form = ProductForm(request.POST)
+        if form.is_valid():
+            product = form.save(commit=False)
+            product.provider = Person(user_ptr_id=request.user.pk)
+            product.save()
+            return redirect(reverse('products'))
+        else:
+            return render(request, 'hook/form.html', locals())
+
+    title = 'Nuevo Producto'
+    form = ProductForm()
+    return render(request, 'hook/form.html', locals())
