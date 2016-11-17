@@ -1,4 +1,4 @@
-{% extends 'main/layout.html' %}
+{% extends 'website/layout.html' %}
 {% load i18n %}
 {% load static %}
 {% block more_styles %}
@@ -6,7 +6,7 @@
 {% block nav %}
 {% endblock%}
 
-{% block body %}
+{% block menu-content %}
 
 <section class="contact-container">
     <div class="container">
@@ -31,7 +31,7 @@
                 <form action="." method="post">
                     {% csrf_token %}
                     {% for field in form %}
-                    {% include 'main/hook/field_with_label.html' with field=field %}
+                    {% include 'hook/field_with_label.html' with field=field %}
                     {% endfor %}
                     <input type="submit" value="{% trans 'login'|capfirst %}">
                     <a href="{% url 'accounts:password_reset' %}">{% trans 'Reset password' %}</a>

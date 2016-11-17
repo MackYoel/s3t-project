@@ -1,30 +1,29 @@
 import sendgrid
 from sendgrid.helpers.mail import Email, Content, Mail
-from s3t.settings import SEND_GRID_API_KEY
 from uuid import uuid4
 import time
-# import sendgrid
-# from sendgrid.helpers.mail import *
+import sendgrid
+from sendgrid.helpers.mail import *
 
-# from bitheart.settings import SENDGRID_KEY
+from s3t.settings import SENDGRID_KEY
 
 
 
-# def send_email(from_name, from_email, to_email, subject, text_content, html_content, attachment=None):
-#     sg = sendgrid.SendGridAPIClient(api_key=SENDGRID_KEY)
-#     mail = Mail(to_email=Email(to_email),
-#                 from_email=Email(from_email, from_name),
-#                 subject=subject,
-#                 content=Content("text/plain", text_content))
+def send_email(from_name, from_email, to_email, subject, text_content, html_content, attachment=None):
+    sg = sendgrid.SendGridAPIClient(api_key=SENDGRID_KEY)
+    mail = Mail(to_email=Email(to_email),
+                from_email=Email(from_email, from_name),
+                subject=subject,
+                content=Content("text/plain", text_content))
 
-#     mail.add_content(Content("text/html", html_content))
+    mail.add_content(Content("text/html", html_content))
 
-#     if attachment is not None and isinstance(attachment, Attachment):
-#         mail.add_attachment(attachment)
+    if attachment is not None and isinstance(attachment, Attachment):
+        mail.add_attachment(attachment)
 
-#     data = mail.get()
-#     sg.client.mail.send.post(request_body=data)
-#     return True
+    data = mail.get()
+    sg.client.mail.send.post(request_body=data)
+    return True
 
 
 def add_form_control_class(fields):

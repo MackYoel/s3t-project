@@ -12,11 +12,13 @@ from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.utils.translation import ugettext as _
 from django.views.decorators.csrf import csrf_protect
+from django.contrib.auth import authenticate, login
+
 from sendgrid.helpers.mail import *
 
-from accounts.forms import PasswordResetFormEdited
-from bitheart.settings import DEFAULT_EMAIL, SENDGRID_KEY, FROM_NAME
-from main.functions import send_email
+from accounts.forms import PasswordResetFormEdited, AuthenticationFormEdited
+from s3t.settings import DEFAULT_EMAIL, SENDGRID_KEY, FROM_NAME, LOGIN_REDIRECT_URL
+from website.functions import send_email
 
 
 def message(request, code):
@@ -81,3 +83,16 @@ def password_reset(request):
         form = PasswordResetFormEdited()
 
     return render(request, 'accounts/password_reset.html', locals())
+
+
+def custom_login(request):
+    if request.method == "POST":
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect(LOGIN_REDIRECT_URL)
+    else:
+        form = AuthenticationFormEdited()
+    return render(request, 'accounts/login.html', locals())

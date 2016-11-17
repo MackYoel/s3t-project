@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
 import os
-from .local_settings import *
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -125,3 +124,10 @@ if DEBUG:
     DOMAIN_NAME = 'http://localhost:8000'
 else:
     DOMAIN_NAME = None
+
+LOGIN_REDIRECT_URL = '/'
+
+DEFAULT_EMAIL = "cecilurat@gmail.com"
+FROM_NAME = "Ceci"
+FROM_EMAIL = "cecilurat@gmail.com"
+SENDGRID_KEY = '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'

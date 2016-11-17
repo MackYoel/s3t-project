@@ -2,8 +2,7 @@ from django.conf.urls import url
 from . import views
 
 urlpatterns = [
-    url(r'^$', views.home, name="home"),
-    url(r'^panel/$', views.panel, name="home"),
+    url(r'^$', views.panel, name="home"),
     url(r'^providers/$', views.providers, name="providers"),
     url(r'^providers/new/$', views.new_provider, name="new_provider"),
     url(r'^providers/edit/(?P<pk>[0-9]+)/$', views.edit_provider, name="edit_provider"),

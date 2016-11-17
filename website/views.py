@@ -4,13 +4,12 @@ from accounts.models import Person
 from django.urls import reverse
 from django.http import HttpResponse
 from website.functions import send_email, create_unique_token
+from accounts.functions import generate_username
 from s3t.settings import DOMAIN_NAME
+from django.contrib.auth.decorators import login_required
 
 
-def home(request):
-    return render(request, 'website/index.html')
-
-
+@login_required()
 def panel(request):
     return render(request, 'website/panel.html')
 
@@ -25,6 +24,7 @@ def new_provider(request):
         form = PersonForm(request.POST)
         if form.is_valid():
             person = form.save(commit=False)
+            person = generate_username(person.first_name)
             token = create_unique_token()
             msg = 'Por favor haga <a href="{}{}">click aqui</a> para asignar una contraseña a su cuenta.'
             msg = msg.format(DOMAIN_NAME, reverse('set_password_provider', kwargs={'token': token}))
