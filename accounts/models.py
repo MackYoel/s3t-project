@@ -9,3 +9,6 @@ class Person(User):
     account_number = models.CharField(max_length=20, null=True, blank=True)
     bank = models.CharField(max_length=50, null=True, blank=True)
     token = models.CharField(max_length=70, null=True, blank=True)
+
+
+User.person = property(lambda e: Person.objects.get_or_create(pk=e.pk)[0])
