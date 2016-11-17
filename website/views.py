@@ -7,6 +7,7 @@ from website.functions import send_email, create_unique_token
 from accounts.functions import generate_username
 from s3t.settings import DOMAIN_NAME
 from django.contrib.auth.decorators import login_required
+from website.forms import ProductForm
 
 
 @login_required()
@@ -24,7 +25,7 @@ def new_provider(request):
         form = PersonForm(request.POST)
         if form.is_valid():
             person = form.save(commit=False)
-            person = generate_username(person.first_name)
+            person.username = generate_username(person.first_name)
             token = create_unique_token()
             msg = 'Por favor haga <a href="{}{}">click aqui</a> para asignar una contraseña a su cuenta.'
             msg = msg.format(DOMAIN_NAME, reverse('set_password_provider', kwargs={'token': token}))
@@ -78,4 +79,17 @@ def set_password_provider(request, token):
 
 
 def new_product(request):
-    pass
+    comeback_to = 'products'
+    if request.method == 'POST' and request.POST:
+        form = ProductForm(request.POST)
+        if form.is_valid():
+            product = form.save(commit=False)
+            product.provider = Person(user_ptr_id=request.user.pk)
+            product.save()
+            return redirect(reverse('products'))
+        else:
+            return render(request, 'hook/form.html', locals())
+
+    title = 'Nuevo Producto'
+    form = ProductForm()
+    return render(request, 'hook/form.html', locals())

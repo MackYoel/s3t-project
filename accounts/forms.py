@@ -62,6 +62,7 @@ class PersonForm(ModelForm):
             'phone_number': 'Celular',
             'account_number': 'Nro de cuenta',
             'bank': 'Banco',
+            'is_active': 'Habilitado',
         }        
         update_form_labels(self, labels)
 
