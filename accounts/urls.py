@@ -9,7 +9,8 @@ from . import views
 urlpatterns = [
                 url(r'^message/(?P<code>[-\w]+)/$', views.message, name='message'),
                 url(r'^profile/password/reset/$', views.password_reset, name='password_reset'),
-                url(r'^login/$', views.custom_login, name='custom_login'),
+                url(r'^login/$', views.login_view, name='login'),
+                url(r'^logout/$', views.logout_view, name='logout'),
                 # url(r'^login/$', 'django.contrib.auth.views.login', {
                 #             'template_name': 'accounts/login.html',
                 #             'authentication_form': AuthenticationFormEdited,

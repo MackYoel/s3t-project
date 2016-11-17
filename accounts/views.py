@@ -1,5 +1,6 @@
-import sendgrid
 from django.contrib import messages
+from django.contrib.auth import authenticate, login
+from django.contrib.auth import logout
 from django.contrib.auth.models import User
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.shortcuts import get_current_site
@@ -12,12 +13,9 @@ from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.utils.translation import ugettext as _
 from django.views.decorators.csrf import csrf_protect
-from django.contrib.auth import authenticate, login
-
-from sendgrid.helpers.mail import *
 
 from accounts.forms import PasswordResetFormEdited, AuthenticationFormEdited
-from s3t.settings import DEFAULT_EMAIL, SENDGRID_KEY, FROM_NAME, LOGIN_REDIRECT_URL
+from s3t.settings import DEFAULT_EMAIL, FROM_NAME, LOGIN_REDIRECT_URL
 from website.functions import send_email
 
 
@@ -85,7 +83,7 @@ def password_reset(request):
     return render(request, 'accounts/password_reset.html', locals())
 
 
-def custom_login(request):
+def login_view(request):
     if request.method == "POST":
         username = request.POST['username']
         password = request.POST['password']
@@ -96,3 +94,8 @@ def custom_login(request):
     else:
         form = AuthenticationFormEdited()
     return render(request, 'accounts/login.html', locals())
+
+
+def logout_view(request):
+    logout(request)
+    return redirect(LOGIN_REDIRECT_URL)
