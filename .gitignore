@@ -3,5 +3,7 @@ s3t/local_settings.py
 s3t.sublime-project
 s3t.sublime-workspace
 bower_components/
-migrations/
+migrations/*
 db.sqlite3
+/website/migrations/*
+/db.sqlite3
