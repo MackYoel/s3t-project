@@ -9,4 +9,5 @@ urlpatterns = [
     url(r'^providers/setpassword/(?P<token>.*)/$', views.set_password_provider, name="set_password_provider"),
     url(r'^products/$', views.products, name="products"),
     url(r'^providers/products/new/$', views.new_product, name="new_product"),
+    url(r'^providers/products/edit/(?P<pk>[0-9]+)/$', views.edit_product, name="edit_product"),
 ]

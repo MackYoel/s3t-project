@@ -2,10 +2,20 @@
 {% load static %}
 
 {% block body %}
-<h1>Mis Productos</h1>
-<a href="{% url 'new_product' %}">
-    <button type="button" class="btn btn-primary">Agregar producto</button>
-</a>
+<h1>{{title}}</h1>
+{% if not is_admin %}
+    <a href="{% url 'new_product' %}">
+        <button type="button" class="btn btn-primary">Agregar producto</button>
+    </a>
+
+{% else %}
+    <select value="8">
+        <option value="0">Todos</option>
+        {% for p in providers %}
+            <option value="{{p.pk}}" {% if provider_pk == p.pk %} selected="selected" {% endif %}>{{p.first_name}} {{p.last_name}}</option>
+        {% endfor %}
+    </select>
+{% endif %}
 
 <br><br>
 <table class="table">
@@ -18,11 +28,11 @@
             <th>Talla</th>
             <th>Colores</th>
             <th>Precio</th>
-            <th>Acciones</th>
+            <th>Acciones<br> del Carrito</th>
         </tr>
     </thead>
         <tbody>
-            {% for p in providers %}
+            {% for p in products %}
                 <tr>
                     <th scope="row">{{ forloop.counter }}</th>
                     {% if p.is_active %}
@@ -30,14 +40,17 @@
                     {% else %}
                         <td>No</td>
                     {% endif %}
-                    <td>{{p.first_name}} {{p.last_name}}</td>
-                    <td>{{p.email}}</td>
-                    <td>{{p.balance}}</td>
-                    <td>{{p.phone_number|default:"--"}}</td>
-                    <td>{{ p.ruc|default_if_none:"--" }}</td>
-                    <td>{{p.account_number|default:"--"}}</td>
-                    <td>{{p.bank|default:"--"}}</td>
-                    <td><a href="{% url 'edit_provider' p.pk %}">editar</a> - <a href="{% url 'products' %}?provider={{p.pk}}">ver prods</a></td>
+                    <td>{{p.image}}</td>
+                    <td>{{p.name}}</td>
+                    <td>{{p.size}}</td>
+                    <td>{{p.get_colors|default:"--"}}</td>
+                    <td>{{p.price}}</td>
+                    {% if not is_admin %}
+                        <td><a href="{% url 'edit_product' p.pk %}">editar</a></td>
+                    {% else %}
+                        <td><a href="#">agregar+</a>
+                    {% endif %}
+                    
                 </tr>
             {% endfor %}
         </tbody>

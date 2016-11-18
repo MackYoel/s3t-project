@@ -11,4 +11,4 @@ class Person(User):
     token = models.CharField(max_length=70, null=True, blank=True)
 
 
-User.person = property(lambda e: Person.objects.get(pk=e.pk)[0])
+User.person = property(lambda e: Person.objects.get(pk=e.pk))

@@ -18,11 +18,14 @@ class Product(models.Model):
     available = models.BooleanField(default=True, blank=True)
     colors = models.ManyToManyField(Color, null=True, blank=True)
 
+    @property
+    def get_colors(self):
+        return ', '.join([c.name for c in self.colors.all()])
+
+
 # class ProductColor:
 #     product
 #     color
-
-
 
 
 # class Order:
