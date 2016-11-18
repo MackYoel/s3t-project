@@ -1,0 +1,32 @@
+{% extends "main/layout.html" %}
+{% load static %}
+
+{% block body %}
+<h1>Pedidos</h1>
+
+<br><br>
+<table class="table">
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>Proveedor</th>
+        <th>Fecha</th>
+        <th>Total</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for p in orders %}
+    <tr class="{{p.row_class}}">
+        <th scope="row">{{ forloop.counter }}</th>
+        <td>{{p.provider.get_full_name }}</td>
+        <td>{{p.created_at }}</td>
+        <td>{{p.total}}</td>
+        <td>{{p.get_state_display }}</td>
+        <td><a href="{% url 'order_edit' p.id %}">Ver</a></td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

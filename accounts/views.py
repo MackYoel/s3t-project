@@ -17,7 +17,7 @@ from django.views.decorators.csrf import csrf_protect
 from accounts.forms import PasswordResetFormEdited, AuthenticationFormEdited, SetPasswordFormEdited
 from accounts.models import Person
 from s3t.settings import DEFAULT_EMAIL, FROM_NAME, LOGIN_REDIRECT_URL
-from website.functions import send_email
+from main.functions import send_email
 
 
 def message(request, code):
@@ -118,9 +118,9 @@ def set_password_view(request, token):
             if user is not None:
                 login(request, user)
                 return redirect(LOGIN_REDIRECT_URL)
-        # else:
+                # else:
 
     else:
         form = SetPasswordFormEdited(user=person)
 
-    return render(request, 'hook/form.html', locals())
+    return render(request, 'hook/form_layout.html', locals())

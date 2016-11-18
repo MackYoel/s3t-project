@@ -1,0 +1,11 @@
+{% extends 'main/layout.html' %}
+{% load i18n %}
+{% load static %}
+{% block more_styles %}
+{% endblock %}
+{% block body %}
+<span class="text-center">
+    <h3 class="home_subtitle">{{ title }}</h3>
+</span>
+<span>{{ message|safe }}</span>
+{% endblock %}

@@ -5,5 +5,5 @@ s3t.sublime-workspace
 bower_components/
 migrations/*
 db.sqlite3
-/website/migrations/*
+/main/migrations/*
 /accounts/migrations/*

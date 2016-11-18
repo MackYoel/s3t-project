@@ -1,0 +1,75 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}S3T{% endblock %}</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css"
+          href="{% static 'main/bower_components/bootstrap/dist/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'main/css/sidebar.css' %}">
+    {% block extra_styles %}{% endblock %}
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <!--<link href="http://foundry.mediumra.re/css/theme.css" rel="stylesheet">-->
+</head>
+<body>
+{% block nav %}
+<div class="nav-side-menu">
+    <div class="brand">{{user.first_name|default:user.email}}</div>
+    <i class="fa fa-bars fa-2x toggle-btn" data-toggle="collapse" data-target="#menu-content"></i>
+
+    <div class="menu-list">
+        {% if user.is_authenticated %}
+        <ul id="menu-content" class="menu-content collapse out">
+            {% if user.is_staff %}
+            <li>
+                <a href="{% url 'provider_list' %}">
+                    <i class="fa fa-users fa-lg"></i> Proveedores
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'car' %}">
+                    <i class="glyphicon glyphicon-shopping-cart"></i> Tienda
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'order_list' %}">
+                    <i class="glyphicon glyphicon-th-list"></i> Pedidos
+                </a>
+            </li>
+            {% endif %}
+
+            {% if not user.is_staff %}
+            <li>
+                <a href="{% url 'providers:product_list' %}">
+                    <i class="glyphicon glyphicon-tags"></i> Productos
+                </a>
+            </li>
+
+            <li>
+                <a href="{% url 'providers:order_list' %}">
+                    <i class="glyphicon glyphicon-th-list"></i> Pedidos
+                </a>
+            </li>
+            {% endif %}
+            <li>
+                <a href="{% url 'accounts:logout' %}">
+                    <i class="glyphicon glyphicon-log-out"></i> Salir
+                </a>
+            </li>
+        </ul>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+<div class="menu-content">
+    {% block body %}
+    {% endblock %}
+</div>
+
+<script src="{% static 'main/bower_components/jquery/dist/jquery.min.js' %}"></script>
+<script src="{% static 'main/bower_components/bootstrap/dist/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'main/js/sidebar.js' %}"></script>
+
+{% block extra_scripts %}{% endblock %}
+</body>
+</html>

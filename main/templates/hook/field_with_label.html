@@ -1,0 +1,18 @@
+{% load main_extras %}
+
+<div class="form-group">
+
+{% if field|is_hidden %}
+
+	{{ field }}
+    {% for error in field.errors %}
+    <p class="help-block">{{ error }}</p>
+    {% endfor %}
+{% else %}
+    <label for="id_{{field.name}}">{{ field.label }}</label>
+    {{ field }}
+    {% for error in field.errors %}
+    <p class="help-block">{{ error }}</p>
+    {% endfor %}
+{% endif %}
+</div>

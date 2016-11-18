@@ -1,0 +1,33 @@
+{% extends "main/layout.html" %}
+{% load static %}
+
+{% block body %}
+<h1>Proveedores</h1>
+<a href="{% url 'provider_new' %}">
+    <button type="button" class="btn btn-primary">Agregar proveedor</button>
+</a>
+
+<br><br>
+<table class="table">
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>Fecha</th>
+        <th>Total</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for p in orders %}
+    <tr>
+        <th scope="row">{{ forloop.counter }}</th>
+        <td>{{p.created_at }}</td>
+        <td>{{p.total}}</td>
+        <td>{{p.get_state_display }}</td>
+        <td><a href="{% url 'providers:order_edit' p.id %}">Ver</a></td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

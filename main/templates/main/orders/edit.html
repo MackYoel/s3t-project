@@ -1,0 +1,81 @@
+{% extends "main/layout.html" %}
+{% load static %}
+
+{% block body %}
+<h1>{{title}}</h1>
+
+<br><br>
+<div class="row">
+    <div class="col-md-12" style="border-right:1px solid #ccc">
+        <h4>Productos</h4>
+        <table class="table products">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Imagen</th>
+                <th>Nombre</th>
+                <th>Talla</th>
+                <th>Colores</th>
+                <th>Precio</th>
+                <th>Cantidad</th>
+                <th>Total</th>
+                <!--<th>Acciones</th>-->
+            </tr>
+            </thead>
+            <tbody>
+            {% for p in order_items %}
+            <tr product-pk="{{p.pk}}">
+                <th scope="row">{{ forloop.counter }}</th>
+                <td>{{p.product.image}}</td>
+                <td class="product_name">{{p.product.name}}</td>
+                <td>{{p.product.size}}</td>
+                <td>{{p.product.get_colors|default:"--"}}</td>
+                <td>{{p.product.price}}</td>
+                <td>{{p.quantity}}</td>
+                <td>{{p.total}}</td>
+                <td>
+                    <!--<button type="button" class="btn btn-link add_car">agregar+</button>-->
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <h4>Transporte</h4>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Numero de Guia</th>
+                <th>Transportista</th>
+                <th>Nota</th>
+            </tr>
+            </thead>
+            {% if order.sent_at %}
+            <tbody>
+            <tr>
+                <td>{{order.code}}</td>
+                <td>{{order.transport_name}}</td>
+                <td>{{order.note}}</td>
+            </tr>
+            </tbody>
+            {% endif %}
+        </table>
+        {% if next_action %}
+        <br>
+        <div class="pull-right">
+            <form action="." method="post">
+                {% csrf_token %}
+                <button class="btn btn-primary" type="submit" value="1" name="{{next_action}}">{{next_action_text}}
+                </button>
+            </form>
+        </div>
+        <br>
+        {% endif %}
+        <h4>Historial</h4>
+        {% include 'main/orders/history.html' with order=order %}
+    </div>
+</div>
+{% endblock %}
+{% block extra_scripts %}
+<script src="{% static 'main/js/car.js' %}"></script>
+{% endblock %}

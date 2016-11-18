@@ -4,7 +4,7 @@ from django.forms import ModelForm
 from django.utils.translation import ugettext as _
 
 from accounts.models import Person
-from website.functions import add_form_control_class, update_form_labels
+from main.functions import add_form_control_class, update_form_labels
 
 
 class PasswordChangeFormEdited(PasswordChangeForm):
@@ -63,7 +63,7 @@ class PersonForm(ModelForm):
             'account_number': 'Nro de cuenta',
             'bank': 'Banco',
             'is_active': 'Habilitado',
-        }        
+        }
         update_form_labels(self, labels)
 
         self.fields['first_name'].widget.attrs.update({'required': True})

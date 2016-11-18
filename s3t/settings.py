@@ -35,7 +35,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'website',
+    'main',
+    'providers',
     'accounts'
 ]
 
@@ -114,6 +115,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
 
 if DEBUG:
     DOMAIN_NAME = 'http://localhost:8000'
@@ -126,3 +128,7 @@ DEFAULT_EMAIL = "junior.yc9@gmail.com"
 FROM_NAME = "Junior"
 FROM_EMAIL = "junior.yc9@gmail.com"
 SENDGRID_KEY = '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'
+
+
+EMAIL_SUBJECT_ORDER = 'JUNIOR SAC - Orden de Pedido'
+EMAIL_BODY_ORDER = 'Saludos [PROVIDER_NAME] <br/>Tiene un nuevo pedido de compra de [FROM_NAME] puede verlo <a href="[URL]">aqui</a>'

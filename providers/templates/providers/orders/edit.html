@@ -1,0 +1,78 @@
+{% extends "main/layout.html" %}
+{% load static %}
+
+{% block body %}
+<h1>{{title}}</h1>
+
+<div class="row">
+    <div class="col-md-12" style="border-right:1px solid #ccc">
+        <h4>Productos</h4>
+        <table class="table products">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Imagen</th>
+                <th>Nombre</th>
+                <th>Talla</th>
+                <th>Colores</th>
+                <th>Precio</th>
+                <th>Cantidad</th>
+                <th>Total</th>
+                <!--<th>Acciones</th>-->
+            </tr>
+            </thead>
+            <tbody>
+            {% for p in order_items %}
+            <tr product-pk="{{p.pk}}">
+                <td scope="row">{{ forloop.counter }}</td>
+                <td>{{p.product.image}}</td>
+                <td class="product_name">{{p.product.name}}</td>
+                <td>{{p.product.size}}</td>
+                <td>{{p.product.get_colors|default:"--"}}</td>
+                <td>{{p.product.price}}</td>
+                <td>{{p.quantity}}</td>
+                <td>{{p.total}}</td>
+                <td>
+                    <!--<button type="button" class="btn btn-link add_car">agregar+</button>-->
+                </td>
+            </tr>
+            {% endfor %}
+            <tr class="active">
+                <td colspan="6"></td>
+                <td><b>Total</b></td>
+                <td>{{order.total}}</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <h4>Transporte</h4>
+        {% if order.sent_at %}
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Numero de Guia</th>
+                <th>Transportista</th>
+                <th>Nota</th>
+            </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{order.code}}</td>
+                    <td>{{order.transport_name}}</td>
+                    <td>{{order.note}}</td>
+                </tr>
+            </tbody>
+        </table>
+        {% else %}
+        {% include 'hook/form.html' with form=form %}
+        {% endif %}
+
+        <h4>Historial</h4>
+        {% include 'main/orders/history.html' with order=order %}
+
+    </div>
+</div>
+{% endblock %}
+{% block extra_scripts %}
+<script src="{% static 'main/js/car.js' %}"></script>
+{% endblock %}
