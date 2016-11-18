@@ -112,6 +112,12 @@ def new_product(request):
             product = form.save(commit=False)
             product.provider = request.user.person
             product.save()
+
+            for color in form.cleaned_data['colors']:
+                product.colors.add(color)
+
+            product.save()
+
             return redirect(reverse('products'))
         else:
             return render(request, 'hook/form.html', locals())

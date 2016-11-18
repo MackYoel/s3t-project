@@ -7,4 +7,3 @@ migrations/*
 db.sqlite3
 /website/migrations/*
 /accounts/migrations/*
-/db.sqlite3
