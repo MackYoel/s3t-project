@@ -6,7 +6,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.template import loader
 from django.template.loader import get_template
 from django.utils.encoding import force_bytes
@@ -14,7 +14,8 @@ from django.utils.http import urlsafe_base64_encode
 from django.utils.translation import ugettext as _
 from django.views.decorators.csrf import csrf_protect
 
-from accounts.forms import PasswordResetFormEdited, AuthenticationFormEdited
+from accounts.forms import PasswordResetFormEdited, AuthenticationFormEdited, SetPasswordFormEdited
+from accounts.models import Person
 from s3t.settings import DEFAULT_EMAIL, FROM_NAME, LOGIN_REDIRECT_URL
 from website.functions import send_email
 
@@ -100,3 +101,26 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return redirect(LOGIN_REDIRECT_URL)
+
+
+def set_password_view(request, token):
+    title = _('Update Password')
+    person = get_object_or_404(Person, token=token)
+
+    if request.method == 'POST':
+        form = SetPasswordFormEdited(person, request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.token = ''
+            user.save()
+
+            user = authenticate(username=person.username, password=form.clean_new_password2())
+            if user is not None:
+                login(request, user)
+                return redirect(LOGIN_REDIRECT_URL)
+        # else:
+
+    else:
+        form = SetPasswordFormEdited(user=person)
+
+    return render(request, 'hook/form.html', locals())

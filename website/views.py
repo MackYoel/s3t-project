@@ -1,14 +1,18 @@
+from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import render, redirect, get_object_or_404
+from django.views.decorators.csrf import csrf_exempt
+
 from accounts.forms import PersonForm
 from django.urls import reverse
+from django.utils.translation import ugettext as _
 from django.http import HttpResponse
-from website.functions import send_email, create_unique_token
+from website.functions import send_email, create_unique_token, json
 from accounts.functions import generate_username
-from s3t.settings import DOMAIN_NAME
+from s3t.settings import DOMAIN_NAME, FROM_EMAIL
 from django.contrib.auth.decorators import login_required
 from website.forms import ProductForm
 from accounts.models import Person
-from website.models import Product
+from website.models import Product, CarSession
 
 
 @login_required()
@@ -29,9 +33,9 @@ def new_provider(request):
             person.username = person.email
             token = create_unique_token()
             msg = 'Por favor haga <a href="{}{}">click aqui</a> para asignar una contraseña a su cuenta.'
-            msg = msg.format(DOMAIN_NAME, reverse('set_password_provider', kwargs={'token': token}))
+            msg = msg.format(DOMAIN_NAME, reverse('accounts:set_password', kwargs={'token': token}))
             err = send_email(subject='S3T - Asigne contrasenia',
-                             from_email='junior.yc9@gmail.com',
+                             from_email=FROM_EMAIL,
                              to_email=person.email,
                              content=msg)
             if not err:
@@ -51,32 +55,84 @@ def new_provider(request):
     return render(request, 'hook/form.html', locals())
 
 
+@login_required()
 def products(request):
-    from toctochi_stereo import pprint
-    pprint(request.GET, label='request.GET')
+    if request.user.is_staff:
+        return redirect('car')
+    products = Product.objects.filter(provider=request.user)
+    title = 'Mis Productos'
+    return render(request, 'website/products/list.html', locals())
 
-    if request.method == 'GET':
-        if not request.GET or not request.GET.get('provider'):
-            products = Product.objects.all()
-        else:
-            try:
-                provider_pk = int(request.GET.get('provider'))
-            except:
-                products = Product.objects.all()
-            else:
-                if provider_pk:
-                    products = Product.objects.filter(provider=provider_pk)
 
-    providers = Person.objects.filter(is_superuser=False)
-    is_admin = request.user.is_superuser
-    if not is_admin:
-        title = 'Mis Productos'
+@login_required()
+@staff_member_required
+def car(request):
+    provider_pk = request.GET.get('provider', None)
+    if provider_pk:
+        provider = get_object_or_404(Person, pk=provider_pk)
+        products = Product.objects.filter(provider=provider_pk)
     else:
-        title = 'Tienda de Productos'
+        provider_pk = 0
+        products = Product.objects.all()
+    title = 'Tienda de Productos'
+    providers = Person.objects.filter(is_staff=False)
+    products_in_car = CarSession.objects.filter(user=request.user)
+    return render(request, 'website/car/product_list.html', locals())
 
-    # if is_provider:
-    return render(request, 'website/products/provider_list.html', locals())
-    # else:
+
+@login_required()
+@staff_member_required
+@csrf_exempt
+def car_add_product(request):
+    result = {}
+    if request.method == 'POST':
+        product_pk = request.POST['product_pk']
+        product = get_object_or_404(Product, pk=product_pk)
+        if product:
+            try:
+                CarSession.objects.get(user=request.user, product=product)
+                result["success"] = False
+                result["message"] = _('The product is already added')
+            except CarSession.DoesNotExist:
+                CarSession.objects.create(user=request.user, product=product)
+                result["success"] = True
+    else:
+        result["success"] = False
+        result["message"] = _('Bad Request')
+    return HttpResponse(json.dumps(result), content_type="application/json")
+
+
+@login_required()
+@staff_member_required
+@csrf_exempt
+def car_remove_product(request):
+    result = {}
+    if request.method == 'POST':
+        product_pk = request.POST['product_pk']
+        product = get_object_or_404(Product, pk=product_pk)
+        if product:
+            try:
+                car_session = CarSession.objects.get(user=request.user, product=product)
+                car_session.delete()
+                result["success"] = True
+            except CarSession.DoesNotExist:
+                result["success"] = False
+                result["message"] = _('The product is not in the car')
+    else:
+        result["success"] = False
+        result["message"] = _('Bad Request')
+    return HttpResponse(json.dumps(result), content_type="application/json")
+
+
+@login_required()
+@staff_member_required
+def car_update_quantity(request):
+    title = 'Tienda de Productos, actualización de cantidades'
+    products_in_car = CarSession.objects.filter(user=request.user)
+    products = list()
+    for p in products_in_car:
+        products.append(p.product)
+    return render(request, 'website/car/update_quantity.html', locals())
 
 
 def edit_provider(request, pk):
@@ -94,11 +150,6 @@ def edit_provider(request, pk):
 
     form = PersonForm(instance=provider)
     return render(request, 'hook/form.html', locals())
-
-
-def set_password_provider(request, token):
-    provider = get_object_or_404(Person, token=token)
-    return render(request, 'website/providers/set_password.html', locals())
 
 
 def new_product(request):

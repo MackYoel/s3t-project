@@ -11,6 +11,7 @@ urlpatterns = [
                 url(r'^profile/password/reset/$', views.password_reset, name='password_reset'),
                 url(r'^login/$', views.login_view, name='login'),
                 url(r'^logout/$', views.logout_view, name='logout'),
+                url(r'^update-password/(?P<token>.*)/$', views.set_password_view, name="set_password"),
                 # url(r'^login/$', 'django.contrib.auth.views.login', {
                 #             'template_name': 'accounts/login.html',
                 #             'authentication_form': AuthenticationFormEdited,

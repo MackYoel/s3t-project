@@ -1,0 +1,66 @@
+{% extends "website/layout.html" %}
+{% load static %}
+
+{% block body %}
+<h1>{{title}}</h1>
+<select value="8">
+    <option value="0">Todos</option>
+    {% for p in providers %}
+    <option value="{{p.pk}}" {% if provider_pk is p.pk %} selected="selected" {% endif %}>{{p.first_name}}
+        {{p.last_name}}
+    </option>
+    {% endfor %}
+</select>
+
+<br><br>
+<div class="row">
+    <div class="col-md-9" style="border-right:1px solid #ccc">
+        <table class="table products">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Habilitado</th>
+                <th>Imagen</th>
+                <th>Nombre</th>
+                <th>Talla</th>
+                <th>Colores</th>
+                <th>Precio</th>
+                <th>Acciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for p in products %}
+            <tr product-pk="{{p.pk}}">
+                <th scope="row">{{ forloop.counter }}</th>
+                {% if p.is_active %}
+                <td>Si</td>
+                {% else %}
+                <td>No</td>
+                {% endif %}
+                <td>{{p.image}}</td>
+                <td class="product_name">{{p.name}}</td>
+                <td>{{p.size}}</td>
+                <td>{{p.get_colors|default:"--"}}</td>
+                <td>{{p.price}}</td>
+                <td>
+                    <button type="button" class="btn btn-link add_car">agregar+</button>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-3">
+        <h4>Agregados al carrito</h4>
+        <ul id="in_car">
+            {% for p in products_in_car %}
+            <li product-pk="{{p.product.pk}}">{{p.product.name}}</li>
+            {% endfor %}
+        </ul>
+        <a href="{% url 'car_update_quantity' %}" class="btn btn-primary">continuar</a>
+    </div>
+</div>
+{% endblock %}
+{% block extra_scripts %}
+<script src="{% static 'website/js/car.js' %}"></script>
+{% endblock %}

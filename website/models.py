@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 from accounts.models import Person
 
@@ -39,3 +40,8 @@ class Product(models.Model):
 #     product_color
 #     dozen_quantity
 #     subtotal
+
+class CarSession(models.Model):
+    user = models.ForeignKey(User)
+    product = models.ForeignKey(Product)
+    quantity = models.IntegerField(default=1)  # TODO check if is necessary

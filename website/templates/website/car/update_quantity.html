@@ -1,0 +1,45 @@
+{% extends "website/layout.html" %}
+{% load static %}
+
+{% block body %}
+<h1>{{title}}</h1>
+<br><br>
+<table class="table products">
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>Imagen</th>
+        <th>Nombre</th>
+        <th>Talla</th>
+        <th>Colores</th>
+        <th>Precio</th>
+        <th>Cantidad</th>
+        <th>Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for p in products %}
+    <tr product-pk="{{p.pk}}">
+        <th scope="row">{{ forloop.counter }}</th>
+        <td>{{p.image}}</td>
+        <td class="product_name">{{p.name}}</td>
+        <td>{{p.size}}</td>
+        <td>{{p.get_colors|default:"--"}}</td>
+        <td>{{p.price}}</td>
+        <td>
+            <input type="number" class="form-control" style="width:80px">
+        </td>
+        <td>
+            <button class="btn btn-danger remove_product">Quitar</button>
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<br>
+<a href="{% url 'car' %}">Volver a la tienda</a>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{% static 'website/js/car.js' %}"></script>
+{% endblock %}

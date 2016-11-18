@@ -4,7 +4,8 @@
 <head>
     <title>{% block title %}S3T{% endblock %}</title>
     <meta charset="utf-8">
-    <link rel="stylesheet" type="text/css" href="{% static 'website/bower_components/bootstrap/dist/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css"
+          href="{% static 'website/bower_components/bootstrap/dist/css/bootstrap.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'website/css/sidebar.css' %}">
     {% block extra_styles %}{% endblock %}
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
@@ -19,13 +20,20 @@
     <div class="menu-list">
         {% if user.is_authenticated %}
         <ul id="menu-content" class="menu-content collapse out">
-          {% if user.is_superuser %}
+            {% if user.is_staff %}
             <li>
                 <a href="{% url 'providers' %}">
                     <i class="fa fa-users fa-lg"></i> Proveedores
                 </a>
             </li>
-          {% endif %}
+            <li>
+                <a href="{% url 'car' %}">
+                    <i class="glyphicon glyphicon-shopping-cart"></i> Carrito
+                </a>
+            </li>
+            {% endif %}
+            {% endif %}
+            {% if not user.is_staff %}
             <li>
                 <a href="{% url 'products' %}">
                     <i class="glyphicon glyphicon-shopping-cart"></i> Productos

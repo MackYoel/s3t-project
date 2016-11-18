@@ -1,35 +1,67 @@
 {% extends 'website/layout.html' %}
 {% load i18n %}
+{% if not user.authenticated %}
+{% block nav %}
+{% endblock %}
+{% endif %}
+
 {% block body %}
 
-<div class = "row">
-<div class = "col-md-2"></div>
+<div class="row">
+    <div class="col-md-2"></div>
 
-<div class = "col-md-8">
-    <h1>{{title}}</h1>
-    <hr>
-    <form action="." method="post" class="form-horizontal">
+    <div class="col-md-8">
+        <h1>{{title}}</h1>
+        <hr>
+        {% if message %}
+        <div class="alert alert-danger alert-dismissible" role="alert">
+            <strong>Error!</strong> {{ message }} {{ response }}
+        </div>
+        {% endif %}
 
-        {% csrf_token %}
-        {% for f in form %}
+        {% if form.errors %}
+        <div class="alert alert-danger alert-dismissible" role="alert">
+            <ul>
+                {% for field in form %}
+                {% if field.errors %}
+                {% for error in field.errors %}
+                <li>{{ field.label }}, {{ error|escape }} <a href="#id_{{ field.name }}"
+                                                             class="error">ir</a></li>
+                {% endfor %}
+                {% endif %}
+                {% endfor %}
+
+            </ul>
+        </div>
+        {% endif %}
+
+        <form action="." method="post" class="form-horizontal">
+
+            {% csrf_token %}
+            {% for f in form %}
             <div class="form-group {% if f.errors %}has-error{% endif %}">
                 <label for="id_{{f.name}}" class="col-sm-2 control-label">{{ f.label }}</label>
                 <div class="col-sm-10">
                     {{ f }}
                     {% for error in f.errors %}
-                        <p class="help-block">{{ error }}</p>
+                    <p class="help-block">{{ error }}</p>
                     {% endfor %}
                 </div>
             </div>
-        {% endfor %}
-        <div class= "pull-right">
-        <a href="{% url comeback_to %}"><button type="button" class="btn btn-default">Cancelar</button></a>
-        <input type="submit" class="btn btn-primary" class="pull-right" value="{{save_text|default:'Save'}}" name="_save">
-        </div>
-    </form>
+            {% endfor %}
+            <div class="pull-right">
+                {% if comeback_to %}
+                <a href="{% url comeback_to %}">
+                    <button type="button" class="btn btn-default">Cancelar</button>
+                </a>
+                {% endif %}
+                <input type="submit" class="btn btn-primary" class="pull-right" value="{{save_text|default:'Save'}}"
+                       name="_save">
+            </div>
+        </form>
 
-</div>
-<div class = "col-md-2"></div>
+    </div>
+    <div class="col-md-2"></div>
 
 </div>
 

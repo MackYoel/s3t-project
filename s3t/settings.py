@@ -11,9 +11,9 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
 import os
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
@@ -25,7 +25,6 @@ SECRET_KEY = 'b%3t75pnwv)l6ab$$(q6-s+01+i&c!ic5*8adap3lhl)_m4&-a'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -70,7 +69,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 's3t.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
@@ -80,7 +78,6 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
@@ -100,7 +97,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
 
@@ -114,7 +110,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
@@ -127,7 +122,7 @@ else:
 
 LOGIN_REDIRECT_URL = '/'
 
-DEFAULT_EMAIL = "cecilurat@gmail.com"
-FROM_NAME = "Ceci"
-FROM_EMAIL = "cecilurat@gmail.com"
+DEFAULT_EMAIL = "junior.yc9@gmail.com"
+FROM_NAME = "Junior"
+FROM_EMAIL = "junior.yc9@gmail.com"
 SENDGRID_KEY = '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'

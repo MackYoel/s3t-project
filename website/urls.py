@@ -6,8 +6,11 @@ urlpatterns = [
     url(r'^providers/$', views.providers, name="providers"),
     url(r'^providers/new/$', views.new_provider, name="new_provider"),
     url(r'^providers/edit/(?P<pk>[0-9]+)/$', views.edit_provider, name="edit_provider"),
-    url(r'^providers/setpassword/(?P<token>.*)/$', views.set_password_provider, name="set_password_provider"),
     url(r'^products/$', views.products, name="products"),
     url(r'^providers/products/new/$', views.new_product, name="new_product"),
     url(r'^providers/products/edit/(?P<pk>[0-9]+)/$', views.edit_product, name="edit_product"),
+    url(r'^car/$', views.car, name="car"),
+    url(r'^car-add-product/$', views.car_add_product, name="car_add_product"),
+    url(r'^car-remove-product/$', views.car_remove_product, name="car_remove_product"),
+    url(r'^car-update-quantity/$', views.car_update_quantity, name="car_update_quantity"),
 ]
