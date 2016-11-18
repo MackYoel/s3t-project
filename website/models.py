@@ -43,5 +43,6 @@ class Product(models.Model):
 
 class CarSession(models.Model):
     user = models.ForeignKey(User)
+    provider = models.ForeignKey(Person,related_name='provider')
     product = models.ForeignKey(Product)
     quantity = models.IntegerField(default=1)  # TODO check if is necessary

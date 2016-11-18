@@ -6,7 +6,7 @@ from accounts.forms import PersonForm
 from django.urls import reverse
 from django.utils.translation import ugettext as _
 from django.http import HttpResponse
-from website.functions import send_email, create_unique_token, json
+from website.functions import send_email, create_unique_token, json, Counter
 from accounts.functions import generate_username
 from s3t.settings import DOMAIN_NAME, FROM_EMAIL
 from django.contrib.auth.decorators import login_required
@@ -67,16 +67,18 @@ def products(request):
 @login_required()
 @staff_member_required
 def car(request):
-    provider_pk = request.GET.get('provider', None)
-    if provider_pk:
-        provider = get_object_or_404(Person, pk=provider_pk)
-        products = Product.objects.filter(provider=provider_pk)
+    provider_pk = int(request.GET.get('provider', 0))
+    if provider_pk > 0:
+        _provider = get_object_or_404(Person, pk=provider_pk)
+        products = Product.objects.filter(provider=_provider)
     else:
-        provider_pk = 0
         products = Product.objects.all()
     title = 'Tienda de Productos'
     providers = Person.objects.filter(is_staff=False)
     products_in_car = CarSession.objects.filter(user=request.user)
+
+    print(provider_pk)
+    # print(provider_pk+1)
     return render(request, 'website/car/product_list.html', locals())
 
 
@@ -94,7 +96,7 @@ def car_add_product(request):
                 result["success"] = False
                 result["message"] = _('The product is already added')
             except CarSession.DoesNotExist:
-                CarSession.objects.create(user=request.user, product=product)
+                CarSession.objects.create(user=request.user, product=product, provider=product.provider)
                 result["success"] = True
     else:
         result["success"] = False
@@ -126,12 +128,41 @@ def car_remove_product(request):
 
 @login_required()
 @staff_member_required
-def car_update_quantity(request):
+@csrf_exempt
+def car_update_product(request):
+    result = {}
+    if request.method == 'POST':
+        product_pk = request.POST['product_pk']
+        quantity = request.POST['quantity']
+        product = get_object_or_404(Product, pk=product_pk)
+        if product:
+            try:
+                car_session = CarSession.objects.get(user=request.user, product=product)
+                car_session.quantity = quantity
+                car_session.save()
+                result["success"] = True
+            except CarSession.DoesNotExist:
+                result["success"] = False
+                result["message"] = _('The product is not in the car')
+    else:
+        result["success"] = False
+        result["message"] = _('Bad Request')
+    return HttpResponse(json.dumps(result), content_type="application/json")
+
+
+@login_required()
+@staff_member_required
+def car_update_order(request):
     title = 'Tienda de Productos, actualización de cantidades'
-    products_in_car = CarSession.objects.filter(user=request.user)
-    products = list()
-    for p in products_in_car:
-        products.append(p.product)
+    providers = CarSession.objects.values('provider').distinct()
+    products_in_car_by_provider = list()
+    for p in providers:
+        provider = Person.objects.get(pk=p['provider'])
+        products_in_car_by_provider.append((
+            {'provider': provider.get_full_name(), 'products_in_car': CarSession.objects.filter(user=request.user,
+                                                                                                provider=p[
+                                                                                                    'provider'])}))
+    counter = Counter()
     return render(request, 'website/car/update_quantity.html', locals())
 
 

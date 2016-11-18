@@ -63,3 +63,19 @@ def update_form_labels(form, fields):
 
 def create_unique_token():
     return '{}-{}'.format(uuid4(), time.time())
+
+
+class Counter:
+    count = 0
+
+    def increment(self):
+        self.count += 1
+        return ''
+
+    def decrement(self):
+        self.count -= 1
+        return ''
+
+    def double(self):
+        self.count *= 2
+        return ''
