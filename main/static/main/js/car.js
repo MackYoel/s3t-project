@@ -49,32 +49,14 @@ $(document).ready(function(){
         var $product_price = $tr.attr('product-price');
         var $td_product_total = $tr.find('.product-total');
 
-        var $table = $($tr.parents('table'));
-        var $tr_summary = $table.find('.summary');
-        var $summary_quantity = $tr_summary.find('.quantity');
-        var $summary_total = $tr_summary.find('.total');
-
         var quantity = $(this).val();
         if($.isNumeric(quantity) && quantity>0 && quantity%1==0){
             $.post('/car-update-product/',{'product_pk':$product_pk, 'quantity':quantity},function(response){
                 if(response.success){
                     $generateServiceOrder.removeAttr('disabled');
                     $td_product_total.text(parseFloat(quantity)*parseFloat($product_price));
-
-                    var qt = 0, tt=0;
-                    $table.find('.item').each(function(){
-                        var q = $(this).find('.update-quantity').val();
-                        var t = $(this).find('.product-total').text();
-
-                        qt += parseFloat(q);
-                        tt += parseFloat(t);
-                    });
-
-
-
-                    $summary_quantity.text(qt);
-                    $summary_total.text(tt);
-
+                    var $table = $($tr.parents('table'));
+                    sumTableTotals($table);
                 }else{
                     alert(response.message);
                 }
@@ -85,4 +67,25 @@ $(document).ready(function(){
         }
     });
 
+    function sumTableTotals($table){
+        var $tr_summary = $table.find('.summary');
+        var $summary_quantity = $tr_summary.find('.quantity');
+        var $summary_total = $tr_summary.find('.total');
+
+        var qt = 0, tt=0;
+        $table.find('.item').each(function(){
+            var q = $(this).find('.update-quantity').val();
+            var t = $(this).find('.product-total').text();
+
+            qt += parseFloat(q);
+            tt += parseFloat(t);
+        });
+        $summary_quantity.text(qt);
+        $summary_total.text(tt);
+
+    }
+
+    $('table.products').each(function(){
+        sumTableTotals($(this));
+    })
 });
