@@ -80,6 +80,7 @@ class OrderItem(models.Model):
     quantity = models.IntegerField(default=1)
     observation = models.TextField()
     total = models.FloatField(default=0)
+    note = models.CharField(max_length=250)
 
 
 class CarSession(models.Model):
@@ -88,3 +89,4 @@ class CarSession(models.Model):
     observation = models.TextField()
     product = models.ForeignKey(Product)
     quantity = models.IntegerField(default=1)
+    note = models.CharField(max_length=250)

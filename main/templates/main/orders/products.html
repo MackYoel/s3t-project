@@ -15,6 +15,7 @@
             <th>Precio</th>
             <th>Cantidad</th>
             <th>Total</th>
+            <th>Nota</th>
         </tr>
         </thead>
         <tbody>
@@ -28,6 +29,7 @@
             <td>{{p.product.price}}</td>
             <td>{{p.quantity}}</td>
             <td>{{p.total}}</td>
+            <td>{{p.note}}</td>
 
         </tr>
         {% endfor %}
@@ -37,6 +39,7 @@
             <td><b>Total</b></td>
             <td>{{order.quantity}}</td>
             <td>{{order.total}}</td>
+            <td></td>
         </tr>
         </tbody>
     </table>

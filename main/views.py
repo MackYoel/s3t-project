@@ -144,13 +144,18 @@ def car_remove_product(request):
 def car_update_product(request):
     result = {}
     if request.method == 'POST':
-        product_pk = request.POST['product_pk']
-        quantity = request.POST['quantity']
+        product_pk = int(request.POST.get('product_pk', 0))
+        quantity = int(request.POST.get('quantity', 0))
+        note = request.POST.get('note', None)
+
         product = get_object_or_404(Product, pk=product_pk)
         if product:
             try:
                 car_session = CarSession.objects.get(user=request.user, product=product)
-                car_session.quantity = quantity
+                if quantity > 0:
+                    car_session.quantity = quantity
+                if note:
+                    car_session.note = note
                 car_session.save()
                 result["success"] = True
             except CarSession.DoesNotExist:
@@ -195,7 +200,7 @@ def car_create_orders(request):
         for c in car_session_by_provider:
             subtotal = c.quantity * c.product.price
             OrderItem.objects.create(product=c.product, quantity=c.quantity, observation=c.observation,
-                                     total=subtotal, order=order)
+                                     total=subtotal, order=order, note=c.note)
             order.sub_total += subtotal
             order.total += subtotal
             order.quantity += c.quantity

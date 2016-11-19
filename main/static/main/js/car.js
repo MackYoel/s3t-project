@@ -67,6 +67,24 @@ $(document).ready(function(){
         }
     });
 
+    $('.update-note').focusout(function(e){
+        e.preventDefault();
+        var $generateServiceOrder = $('#generateServiceOrder');
+        $generateServiceOrder.attr('disabled','disabled');
+
+        var $tr= $(this).parents('tr');
+        var $product_pk = $tr.attr('product-pk');
+
+        var note = $(this).val();
+        $.post('/car-update-product/',{'product_pk':$product_pk, 'note':note},function(response){
+            if(response.success){
+                $generateServiceOrder.removeAttr('disabled');
+            }else{
+                alert(response.message);
+            }
+        });
+    });
+
     function sumTableTotals($table){
         var $tr_summary = $table.find('.summary');
         var $summary_quantity = $tr_summary.find('.quantity');

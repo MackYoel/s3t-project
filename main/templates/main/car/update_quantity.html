@@ -18,6 +18,7 @@
         <th>Precio</th>
         <th>Cantidad</th>
         <th>Total</th>
+        <th>Nota</th>
         <th>Acciones</th>
     </tr>
     </thead>
@@ -37,6 +38,7 @@
         <td class="product-total">
             {{p.product.price|multiply:p.quantity}}
         </td>
+        <td><input type="text" class="form-control update-note" value="{{p.note}}" tabindex="{{ counter.count }}"></td>
         <td>
             <button class="btn btn-danger remove_product">Quitar</button>
         </td>
