@@ -10,6 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from accounts.forms import PersonForm
 from accounts.models import Person
+from main.forms import OrderClientForm
 from main.functions import send_email, create_unique_token, json, Counter
 from main.models import Product, CarSession, Order, OrderItem
 from s3t.settings import DOMAIN_NAME, FROM_EMAIL, EMAIL_SUBJECT_ORDER, EMAIL_BODY_ORDER, FROM_NAME
@@ -244,8 +245,11 @@ def order_edit(request, pk):
             order.checked_at = datetime.now()
             order.state = Order.CHECKED
         if request.POST.get('check_paid_at', False):
-            order.paid_at = datetime.now()
-            order.state = Order.PAID
+            form = OrderClientForm(request.POST, instance=order)
+            if form.is_valid():
+                order = form.save(commit=False)
+                order.paid_at = datetime.now()
+                order.state = Order.PAID
 
         order.save()
 
@@ -253,11 +257,16 @@ def order_edit(request, pk):
         if not order.paid_at:
             next_action = 'check_paid_at'
             next_action_text = 'Marcar como Pagado'
+            save_text = 'Marcar como Pagado'
         if not order.checked_at:
             next_action = 'check_checked_at'
             next_action_text = 'Marcar como Revisado'
         if not order.received_at:
             next_action = 'check_received_at'
             next_action_text = 'Marcar como Recibido'
+
+    if order.state == Order.CHECKED:
+        show_form = True
+        form = OrderClientForm(instance=order)
 
     return render(request, 'main/orders/edit.html', locals())

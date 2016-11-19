@@ -32,7 +32,6 @@
         {% if comeback_to %}
         <a href="{% url comeback_to %}" class="btn btn-default">Cancelar</a>
         {% endif %}
-        <input type="submit" class="btn btn-primary" class="pull-right" value="{{save_text|default:'Save'}}"
-               name="_save">
+        <input type="submit" class="btn btn-primary" class="pull-right" value="{{save_text|default:'Save'}}" name="{{next_action|default:'_save'}}">
     </div>
 </form>

@@ -41,6 +41,7 @@
             </tbody>
         </table>
 
+        {% if order.sent_at %}
         <h4>Transporte</h4>
         <table class="table">
             <thead>
@@ -50,7 +51,6 @@
                 <th>Nota</th>
             </tr>
             </thead>
-            {% if order.sent_at %}
             <tbody>
             <tr>
                 <td>{{order.code}}</td>
@@ -58,10 +58,33 @@
                 <td>{{order.note}}</td>
             </tr>
             </tbody>
-            {% endif %}
         </table>
-        {% if next_action %}
+        {% endif %}
+
+
+        {% if order.paid_at %}
+        <h4>Pago</h4>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Numero de Operacion</th>
+                <th>Imagen</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>{{order.voucher_code}}</td>
+                <td>{{order.voucher_image}}</td>
+            </tr>
+            </tbody>
+        </table>
+        {% endif %}
         <br>
+
+        {% if show_form %}
+        {% include 'hook/form.html' with form=form %}
+        {% else %}
+        {% if next_action %}
         <div class="pull-right">
             <form action="." method="post">
                 {% csrf_token %}
@@ -71,6 +94,9 @@
         </div>
         <br>
         {% endif %}
+        {% endif %}
+
+
         <h4>Historial</h4>
         {% include 'main/orders/history.html' with order=order %}
     </div>
