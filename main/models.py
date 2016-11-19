@@ -48,14 +48,19 @@ class Order(models.Model):
     sub_total = models.FloatField(default=0)
     discount = models.FloatField(default=0)
     total = models.FloatField(default=0)
+    quantity = models.IntegerField(default=0)
     state = models.IntegerField(default=PENDING, choices=ORDER_STATES)
 
     code = models.CharField(max_length=20, null=True, blank=True)
     transport_name = models.CharField(max_length=100, null=True, blank=True)
     note = models.TextField(null=True, blank=True)
 
+    note_received = models.TextField(null=True, blank=True)
+
     voucher_image = models.ImageField(upload_to='/vouchers/', null=True, blank=True)
     voucher_code = models.CharField(max_length=20, null=True, blank=True)
+    amount_paid = models.FloatField(default=0)
+    paid_done_at = models.DateField(null=True, blank=True)
 
     sent_at = models.DateTimeField(_("sent at"), null=True, blank=True)
     received_at = models.DateTimeField(_("received at"), null=True, blank=True)

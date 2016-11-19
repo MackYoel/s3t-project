@@ -1,0 +1,23 @@
+{% if order.sent_at %}
+<div class="panel panel-default">
+    <!-- Default panel contents -->
+    <div class="panel-heading">Transporte</div>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Numero de Guia</th>
+            <th>Transportista</th>
+            <th>Nota</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>{{order.code}}</td>
+            <td>{{order.transport_name}}</td>
+            <td>{{order.note}}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+{% endif %}

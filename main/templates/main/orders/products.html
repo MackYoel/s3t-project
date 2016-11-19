@@ -1,0 +1,45 @@
+<div class="panel panel-default">
+    <!-- Default panel contents -->
+    <div class="panel-heading">Productos</div>
+    <div class="panel-body">
+        <p>...</p>
+    </div>
+    <table class="table products">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Imagen</th>
+            <th>Nombre</th>
+            <th>Talla</th>
+            <th>Colores</th>
+            <th>Precio</th>
+            <th>Cantidad</th>
+            <th>Total</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for p in order_items %}
+        <tr product-pk="{{p.pk}}">
+            <th scope="row">{{ forloop.counter }}</th>
+            <td>{{p.product.image}}</td>
+            <td class="product_name">{{p.product.name}}</td>
+            <td>{{p.product.size}}</td>
+            <td>{{p.product.get_colors|default:"--"}}</td>
+            <td>{{p.product.price}}</td>
+            <td>{{p.quantity}}</td>
+            <td>{{p.total}}</td>
+
+        </tr>
+        {% endfor %}
+
+        <tr class="active">
+            <td colspan="5"></td>
+            <td><b>Total</b></td>
+            <td>{{order.quantity}}</td>
+            <td>{{order.total}}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+

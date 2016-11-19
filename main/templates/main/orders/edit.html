@@ -7,82 +7,19 @@
 <br><br>
 <div class="row">
     <div class="col-md-12" style="border-right:1px solid #ccc">
-        <h4>Productos</h4>
-        <table class="table products">
-            <thead>
-            <tr>
-                <th>#</th>
-                <th>Imagen</th>
-                <th>Nombre</th>
-                <th>Talla</th>
-                <th>Colores</th>
-                <th>Precio</th>
-                <th>Cantidad</th>
-                <th>Total</th>
-                <!--<th>Acciones</th>-->
-            </tr>
-            </thead>
-            <tbody>
-            {% for p in order_items %}
-            <tr product-pk="{{p.pk}}">
-                <th scope="row">{{ forloop.counter }}</th>
-                <td>{{p.product.image}}</td>
-                <td class="product_name">{{p.product.name}}</td>
-                <td>{{p.product.size}}</td>
-                <td>{{p.product.get_colors|default:"--"}}</td>
-                <td>{{p.product.price}}</td>
-                <td>{{p.quantity}}</td>
-                <td>{{p.total}}</td>
-                <td>
-                    <!--<button type="button" class="btn btn-link add_car">agregar+</button>-->
-                </td>
-            </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-
-        {% if order.sent_at %}
-        <h4>Transporte</h4>
-        <table class="table">
-            <thead>
-            <tr>
-                <th>Numero de Guia</th>
-                <th>Transportista</th>
-                <th>Nota</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>{{order.code}}</td>
-                <td>{{order.transport_name}}</td>
-                <td>{{order.note}}</td>
-            </tr>
-            </tbody>
-        </table>
-        {% endif %}
-
-
-        {% if order.paid_at %}
-        <h4>Pago</h4>
-        <table class="table">
-            <thead>
-            <tr>
-                <th>Numero de Operacion</th>
-                <th>Imagen</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>{{order.voucher_code}}</td>
-                <td>{{order.voucher_image}}</td>
-            </tr>
-            </tbody>
-        </table>
-        {% endif %}
+        {% include 'main/orders/products.html' with order=order %}
+        {% include 'main/orders/transport.html' with order=order %}
+        {% include 'main/orders/pay.html' with order=order %}
         <br>
 
+
         {% if show_form %}
-        {% include 'hook/form.html' with form=form %}
+        <div class="panel panel-info">
+            <div class="panel-heading">{{form_title}}</div>
+            <div class="panel-body">
+                {% include 'hook/form.html' with form=form %}
+            </div>
+        </div>
         {% else %}
         {% if next_action %}
         <div class="pull-right">
@@ -95,9 +32,8 @@
         <br>
         {% endif %}
         {% endif %}
-
-
-        <h4>Historial</h4>
+        <br>
+        <br>
         {% include 'main/orders/history.html' with order=order %}
     </div>
 </div>

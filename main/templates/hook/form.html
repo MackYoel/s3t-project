@@ -1,18 +1,18 @@
-{% if form.errors %}
-<div class="alert alert-danger alert-dismissible" role="alert">
-    <ul>
-        {% for field in form %}
-        {% if field.errors %}
-        {% for error in field.errors %}
-        <li>{{ field.label }}, {{ error|escape }} <a href="#id_{{ field.name }}"
-                                                     class="error">ir</a></li>
-        {% endfor %}
-        {% endif %}
-        {% endfor %}
+<!--{% if form.errors %}-->
+<!--<div class="alert alert-danger alert-dismissible" role="alert">-->
+    <!--<ul>-->
+        <!--{% for field in form %}-->
+        <!--{% if field.errors %}-->
+        <!--{% for error in field.errors %}-->
+        <!--<li>{{ field.label }}, {{ error|escape }} <a href="#id_{{ field.name }}"-->
+                                                     <!--class="error">ir</a></li>-->
+        <!--{% endfor %}-->
+        <!--{% endif %}-->
+        <!--{% endfor %}-->
 
-    </ul>
-</div>
-{% endif %}
+    <!--</ul>-->
+<!--</div>-->
+<!--{% endif %}-->
 
 <form action="." method="post" class="form-horizontal">
 
@@ -32,6 +32,7 @@
         {% if comeback_to %}
         <a href="{% url comeback_to %}" class="btn btn-default">Cancelar</a>
         {% endif %}
-        <input type="submit" class="btn btn-primary" class="pull-right" value="{{save_text|default:'Save'}}" name="{{next_action|default:'_save'}}">
+        <input type="submit" class="btn btn-primary" class="pull-right" value="{{save_text|default:'Save'}}"
+               name="{{next_action|default:'_save'}}">
     </div>
 </form>

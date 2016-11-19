@@ -23,7 +23,7 @@
     </thead>
     <tbody>
     {% for p in x.products_in_car %}
-    <tr product-pk="{{p.product.pk}}" product-price="{{p.product.price}}">
+    <tr product-pk="{{p.product.pk}}" product-price="{{p.product.price}}" class="item">
         <th scope="row">{{counter.increment}} {{ counter.count }}</th>
         <td>{{p.product.image}}</td>
         <td class="product_name">{{p.product.name}}</td>
@@ -42,6 +42,13 @@
         </td>
     </tr>
     {% endfor %}
+
+    <tr class="active summary">
+        <td colspan="5"></td>
+        <td >Total</td>
+        <td class="quantity"></td>
+        <td class="total"></td>
+    </tr>
     </tbody>
 </table>
 {% endfor %}

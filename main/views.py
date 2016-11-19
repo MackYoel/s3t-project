@@ -10,7 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from accounts.forms import PersonForm
 from accounts.models import Person
-from main.forms import OrderClientForm
+from main.forms import OrderPaymentForm, OrderReceivedForm
 from main.functions import send_email, create_unique_token, json, Counter
 from main.models import Product, CarSession, Order, OrderItem
 from s3t.settings import DOMAIN_NAME, FROM_EMAIL, EMAIL_SUBJECT_ORDER, EMAIL_BODY_ORDER, FROM_NAME
@@ -23,7 +23,7 @@ def panel(request):
 
 @login_required()
 def provider_list(request):
-    providers = Person.objects.filter(is_superuser=False)
+    providers = Person.objects.filter(is_staff=False)
     return render(request, 'main/providers/list.html', locals())
 
 
@@ -198,7 +198,7 @@ def car_create_orders(request):
                                      total=subtotal, order=order)
             order.sub_total += subtotal
             order.total += subtotal
-
+            order.quantity += c.quantity
             car_session_by_provider.delete()
 
         order.save()
@@ -217,7 +217,16 @@ def car_create_orders(request):
 @login_required()
 @staff_member_required
 def order_list(request):
-    orders = Order.objects.all().order_by('-created_at')
+    state = int(request.GET.get('state', -1))
+    provider_pk = int(request.GET.get('provider', 0))
+    if state > -1:
+        orders = Order.objects.filter(state=state).order_by('-created_at')
+    else:
+        orders = Order.objects.all().order_by('-created_at')
+
+    if provider_pk > 0:
+        orders = orders.filter(provider__id=provider_pk)
+
     for o in orders:
         o.state_text = o.get_state_display()
         if o.state == Order.PAID:
@@ -226,7 +235,9 @@ def order_list(request):
             o.row_class = 'success'
             # o.state_text = 'Enviado por el proveedor'
 
-            # if o.state == Order.
+    states = Order.ORDER_STATES
+    providers = Person.objects.filter(is_staff=False)
+    # if o.state == Order.
     return render(request, 'main/orders/list.html', locals())
 
 
@@ -236,16 +247,20 @@ def order_edit(request, pk):
     order = get_object_or_404(Order, pk=pk)
     title = 'Pedido a ' + order.provider.get_full_name()
     order_items = OrderItem.objects.filter(order=order)
+    form = None
 
     if request.POST:
         if request.POST.get('check_received_at', False):
             order.received_at = datetime.now()
             order.state = Order.RECEIVED
         if request.POST.get('check_checked_at', False):
-            order.checked_at = datetime.now()
-            order.state = Order.CHECKED
+            form = OrderReceivedForm(request.POST, instance=order)
+            if form.is_valid():
+                order = form.save(commit=False)
+                order.checked_at = datetime.now()
+                order.state = Order.CHECKED
         if request.POST.get('check_paid_at', False):
-            form = OrderClientForm(request.POST, instance=order)
+            form = OrderPaymentForm(request.POST, instance=order)
             if form.is_valid():
                 order = form.save(commit=False)
                 order.paid_at = datetime.now()
@@ -257,16 +272,23 @@ def order_edit(request, pk):
         if not order.paid_at:
             next_action = 'check_paid_at'
             next_action_text = 'Marcar como Pagado'
-            save_text = 'Marcar como Pagado'
+            save_text = next_action_text
         if not order.checked_at:
             next_action = 'check_checked_at'
             next_action_text = 'Marcar como Revisado'
+            save_text = next_action_text
         if not order.received_at:
             next_action = 'check_received_at'
             next_action_text = 'Marcar como Recibido'
 
-    if order.state == Order.CHECKED:
-        show_form = True
-        form = OrderClientForm(instance=order)
+        if order.state == Order.CHECKED:
+            show_form = True
+            form_title = 'Pago realizado'
+            form = OrderPaymentForm(instance=order)
+
+        if order.state == Order.RECEIVED:
+            show_form = True
+            form_title = 'Revisión'
+            form = OrderReceivedForm(instance=order)
 
     return render(request, 'main/orders/edit.html', locals())

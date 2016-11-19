@@ -1,40 +1,46 @@
-<table class="table">
-    <thead>
-    <tr>
-        <th>Estado</th>
-        <th>Fecha</th>
-    </tr>
-    </thead>
-    <tbody>
+<div class="panel panel-default">
+    <!-- Default panel contents -->
+    <div class="panel-heading">Historial</div>
 
-    {% if order.paid_at %}
-    <tr>
-        <td>Pagado</td>
-        <td>{{order.paid_at}}</td>
-    </tr>
-    {% endif %}
-    {% if order.checked_at %}
-    <tr>
-        <td>Revisado</td>
-        <td>{{order.checked_at }}</td>
-    </tr>
-    {% endif %}
-    {% if order.received_at %}
-    <tr>
-        <td>Recibido</td>
-        <td>{{order.received_at }}</td>
-    </tr>
-    {% endif %}
-    {% if order.sent_at %}
-    <tr>
-        <td>Enviado</td>
-        <td>{{order.sent_at }}</td>
-    </tr>
-    {% endif %}
 
-    <tr>
-        <td>Pedido</td>
-        <td>{{order.created_at }}</td>
-    </tr>
-    </tbody>
-</table>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Estado</th>
+            <th>Fecha</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        {% if order.paid_at %}
+        <tr>
+            <td>Pagado al proveedor</td>
+            <td>{{order.paid_at}}</td>
+        </tr>
+        {% endif %}
+        {% if order.checked_at %}
+        <tr>
+            <td>Revisado por el cliente</td>
+            <td>{{order.checked_at }}</td>
+        </tr>
+        {% endif %}
+        {% if order.received_at %}
+        <tr>
+            <td>Recibido por el cliente</td>
+            <td>{{order.received_at }}</td>
+        </tr>
+        {% endif %}
+        {% if order.sent_at %}
+        <tr>
+            <td>Enviado por el Proveedor</td>
+            <td>{{order.sent_at }}</td>
+        </tr>
+        {% endif %}
+
+        <tr>
+            <td>Pedido hecho por el cliente</td>
+            <td>{{order.created_at }}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>

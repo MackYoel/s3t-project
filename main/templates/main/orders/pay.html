@@ -1,0 +1,25 @@
+{% if order.paid_at %}
+<div class="panel panel-default">
+    <!-- Default panel contents -->
+    <div class="panel-heading">Pago</div>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Fecha</th>
+            <th>Monto</th>
+            <th>Numero de Operacion</th>
+            <th>Imagen</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>{{order.paid_done_at}}</td>
+            <td>{{order.amount_paid}}</td>
+            <td>{{order.voucher_code}}</td>
+            <td>{{order.voucher_image}}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+{% endif %}
