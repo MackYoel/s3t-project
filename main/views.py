@@ -1,3 +1,5 @@
+# coding=utf-8
+
 from datetime import datetime
 
 from django.contrib.admin.views.decorators import staff_member_required
