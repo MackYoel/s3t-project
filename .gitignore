@@ -7,3 +7,4 @@ migrations/*
 db.sqlite3
 /main/migrations/*
 /accounts/migrations/*
+.idea
