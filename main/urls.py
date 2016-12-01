@@ -1,5 +1,8 @@
 from django.conf.urls import url
+
+from s3t import settings
 from . import views
+from django.conf.urls.static import static
 
 urlpatterns = [
     url(r'^$', views.panel, name="home"),
@@ -14,4 +17,4 @@ urlpatterns = [
     url(r'^car-create-orders/$', views.car_create_orders, name="car_create_orders"),
     url(r'^orders-list/$', views.order_list, name="order_list"),
     url(r'^orders-edit/(?P<pk>[0-9]+)/$', views.order_edit, name="order_edit"),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
