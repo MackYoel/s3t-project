@@ -2,6 +2,7 @@ from datetime import datetime
 
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
+from django.db.models import Sum
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
@@ -10,9 +11,9 @@ from django.views.decorators.csrf import csrf_exempt
 
 from accounts.forms import PersonForm
 from accounts.models import Person
-from main.forms import OrderPaymentForm, OrderReceivedForm
+from main.forms import OrderReceivedForm, PaymentForm
 from main.functions import send_email, create_unique_token, json, Counter
-from main.models import Product, CarSession, Order, OrderItem
+from main.models import Product, CarSession, Order, OrderItem, Payment
 from s3t.settings import DOMAIN_NAME, FROM_EMAIL, EMAIL_SUBJECT_ORDER, EMAIL_BODY_ORDER, FROM_NAME
 
 
@@ -265,13 +266,33 @@ def order_edit(request, pk):
                 order.checked_at = datetime.now()
                 order.state = Order.CHECKED
         if request.POST.get('check_paid_at', False):
-            form = OrderPaymentForm(request.POST, instance=order)
-            if form.is_valid():
-                order = form.save(commit=False)
-                order.paid_at = datetime.now()
-                order.state = Order.PAID
+            total_paid = Payment.objects.filter(order=order).aggregate(total_amount=Sum('amount'))
+            if total_paid:
+                total_paid = total_paid['total_amount']
+            else:
+                total_paid = 0
+
+            if order.total > total_paid:
+                form = PaymentForm(request.POST, request.FILES)
+                if form.is_valid():
+                    payment = form.save(commit=False)
+                    payment.order = order
+                    payment.save()
+
+                    total_paid += payment.amount
+                    if total_paid - order.total == 0:
+                        order.paid_at = datetime.now()
+                        order.state = Order.PAID
 
         order.save()
+
+    payments = Payment.objects.filter(order=order)
+    total_paid = Payment.objects.filter(order=order).aggregate(total_amount=Sum('amount'))
+    if total_paid:
+        total_paid = total_paid['total_amount']
+    else:
+        total_paid = 0
+
 
     if order.sent_at:
         if not order.paid_at:
@@ -289,7 +310,10 @@ def order_edit(request, pk):
         if order.state == Order.CHECKED:
             show_form = True
             form_title = 'Pago realizado'
-            form = OrderPaymentForm(instance=order)
+
+            amount_to_pay = order.total - total_paid
+            if amount_to_pay > 0:
+                form = PaymentForm(initial={'amount': amount_to_pay})
 
         if order.state == Order.RECEIVED:
             show_form = True

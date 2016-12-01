@@ -1,4 +1,4 @@
-{% if order.paid_at %}
+{% if payments %}
 <div class="panel panel-default">
     <!-- Default panel contents -->
     <div class="panel-heading">Pago</div>
@@ -8,16 +8,29 @@
         <tr>
             <th>Fecha</th>
             <th>Monto</th>
+            <th>Observación</th>
             <th>Numero de Operacion</th>
-            <th>Imagen</th>
+            <th>Imagen de recibo</th>
         </tr>
         </thead>
         <tbody>
+        {% for p in payments %}
         <tr>
-            <td>{{order.paid_done_at}}</td>
-            <td>{{order.amount_paid}}</td>
-            <td>{{order.voucher_code}}</td>
-            <td>{{order.voucher_image}}</td>
+            <td>{{p.paid_at}}</td>
+            <td>{{p.amount}}</td>
+            <td>{{p.observation}}</td>
+            <td>{{p.voucher_code}}</td>
+            <td>{{p.voucher_image}}</td>
+        </tr>
+        {% endfor %}
+        <tr class="active">
+            <td><b>Total Pagado</b></td>
+            <td>
+                <b>{{total_paid}}</b>
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
         </tr>
         </tbody>
     </table>

@@ -15,7 +15,7 @@ class Color(models.Model):
 class Product(models.Model):
     provider = models.ForeignKey(Person)
     name = models.CharField(max_length=100)
-    image = models.ImageField(null=True, blank=True, upload_to='/images')
+    image = models.ImageField(null=True, blank=True, upload_to='images')
     size = models.CharField(max_length=50)
     price = models.FloatField()
     available = models.BooleanField(default=True, blank=True)
@@ -48,6 +48,7 @@ class Order(models.Model):
     sub_total = models.FloatField(default=0)
     discount = models.FloatField(default=0)
     total = models.FloatField(default=0)
+    paid = models.FloatField(default=0)
     quantity = models.IntegerField(default=0)
     state = models.IntegerField(default=PENDING, choices=ORDER_STATES)
 
@@ -56,11 +57,6 @@ class Order(models.Model):
     note = models.TextField(null=True, blank=True)
 
     note_received = models.TextField(null=True, blank=True)
-
-    voucher_image = models.ImageField(upload_to='/vouchers/', null=True, blank=True)
-    voucher_code = models.CharField(max_length=20, null=True, blank=True)
-    amount_paid = models.FloatField(default=0)
-    paid_done_at = models.DateField(null=True, blank=True)
 
     sent_at = models.DateTimeField(_("sent at"), null=True, blank=True)
     received_at = models.DateTimeField(_("received at"), null=True, blank=True)
@@ -80,7 +76,20 @@ class OrderItem(models.Model):
     quantity = models.IntegerField(default=1)
     observation = models.TextField()
     total = models.FloatField(default=0)
-    note = models.CharField(max_length=250)
+    note = models.CharField(max_length=250, blank=True, null=True)
+
+
+class Payment(models.Model):
+    order = models.ForeignKey(Order)
+    amount = models.FloatField()
+    observation = models.CharField(max_length=200, null=True, blank=True)
+
+    voucher_image = models.ImageField(upload_to='vouchers', null=True, blank=True)
+    voucher_code = models.CharField(max_length=20, null=True, blank=True)
+
+    paid_at = models.DateTimeField(_("paid at"), null=True, blank=True)
+
+    created_at = models.DateTimeField(_("created at"), auto_now_add=True)
 
 
 class CarSession(models.Model):

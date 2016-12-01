@@ -2,14 +2,14 @@
 {% load static %}
 
 {% block body %}
-<h1>{{title}}</h1>
+<h1  class="page-header">{{title}}</h1>
 
-<br><br>
+<!--<br><br>-->
 <div class="row">
     <div class="col-md-12" style="border-right:1px solid #ccc">
         {% include 'main/orders/products.html' with order=order %}
         {% include 'main/orders/transport.html' with order=order %}
-        {% include 'main/orders/pay.html' with order=order %}
+        {% include 'main/orders/pay.html' with payments=payments total_paid=total_paid %}
         <br>
 
 
