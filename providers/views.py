@@ -1,0 +1,104 @@
+from datetime import datetime
+
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect, get_object_or_404
+from django.shortcuts import render
+from django.urls import reverse
+
+from accounts.models import Person
+from .forms import ProductForm, OrderProviderForm
+from main.models import Product, Order, OrderItem
+
+
+@login_required()
+def panel(request):
+    return render(request, 'main/panel.html')
+
+
+@login_required()
+def product_list(request):
+    if request.user.is_staff:
+        provider_pk = int(request.GET.get('provider', 0))
+        if provider_pk > 0:
+            provider = get_object_or_404(Person, pk=provider_pk)
+            products = Product.objects.filter(provider=provider)
+        else:
+            products = Product.objects.all()
+        title = 'Productos de ' + provider.get_full_name()
+    else:
+        products = Product.objects.filter(provider=request.user)
+        title = 'Mis Productos'
+    return render(request, 'providers/products/list.html', locals())
+
+
+@login_required()
+def product_new(request):
+    comeback_to = 'providers:product_list'
+    if request.method == 'POST' and request.POST:
+        # pdb.set_trace()
+        form = ProductForm(request.POST)
+        if form.is_valid():
+            product = form.save(commit=False)
+            product.provider = request.user.person
+            product.save()
+
+            for color in form.cleaned_data['colors']:
+                product.colors.add(color)
+
+            product.save()
+
+            return redirect(reverse('providers:product_list'))
+        else:
+            return render(request, 'hook/form_layout.html', locals())
+
+    title = 'Nuevo Producto'
+    form = ProductForm()
+    return render(request, 'hook/form_layout.html', locals())
+
+
+@login_required()
+def product_edit(request, pk):
+    product = get_object_or_404(Product, pk=int(pk))
+    title = 'Editar Producto'
+    comeback_to = 'products'
+
+    if request.method == 'POST' and request.POST:
+        form = ProductForm(request.POST, instance=product)
+        if form.is_valid():
+            form.save()
+            return redirect(reverse('products'))
+        else:
+            return render(request, 'hook/form_layout.html', locals())
+
+    form = ProductForm(instance=product)
+    return render(request, 'hook/form_layout.html', locals())
+
+
+@login_required()
+def order_list(request):
+    orders = Order.objects.filter(provider=request.user).order_by('-created_at')
+    return render(request, 'providers/orders/list.html', locals())
+
+
+@login_required()
+def order_edit(request, pk):
+
+    order = get_object_or_404(Order, pk=pk, provider=request.user)
+    title = 'Pedido'
+    comeback_to = 'providers:order_list'
+    order_items = OrderItem.objects.filter(order=order)
+
+    if order.state == order.PENDING:
+        save_text = 'Enviar a Junior'
+        form_title = 'Transporte'
+        if request.POST:
+            form = OrderProviderForm(request.POST, instance=order)
+            if form.is_valid():
+                order = form.save(commit=False)
+                order.sent_at = datetime.now()
+                order.state = Order.SENT
+                order.save()
+        else:
+            form = OrderProviderForm(instance=order)
+
+    return render(request, 'providers/orders/edit.html', locals())
