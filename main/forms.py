@@ -1,3 +1,5 @@
+# coding=utf-8
+
 from django.forms import ModelForm, CheckboxSelectMultiple, DateInput
 from .models import Product, Color, Order, Payment
 from .functions import add_form_control_class, update_form_labels, add_form_required
