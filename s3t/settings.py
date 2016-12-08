@@ -83,7 +83,7 @@ WSGI_APPLICATION = 's3t.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': DB_ENGINE,
         'NAME': DB_NAME,
         'USER': DB_USER,
         'PASSWORD': DB_PWD,
@@ -137,7 +137,7 @@ MEDIA_URL = '/media/'
 if DEBUG:
     DOMAIN_NAME = 'http://localhost:8000'
 else:
-    DOMAIN_NAME = None
+    DOMAIN_NAME = 'kafuexport.com'
 
 LOGIN_REDIRECT_URL = '/'
 

@@ -71,7 +71,7 @@ def provider_edit(request, pk):
         form = PersonForm(request.POST, instance=provider)
         if form.is_valid():
             form.save()
-            return redirect(reverse('providers'))
+            return redirect(reverse('provider_list'))
         else:
             return render(request, 'hook/form_layout.html', locals())
 
