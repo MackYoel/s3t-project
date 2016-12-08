@@ -137,7 +137,7 @@ MEDIA_URL = '/media/'
 if DEBUG:
     DOMAIN_NAME = 'http://localhost:8000'
 else:
-    DOMAIN_NAME = 'kafuexport.com'
+    DOMAIN_NAME = 'http://kafuexport.com'
 
 LOGIN_REDIRECT_URL = '/'
 
