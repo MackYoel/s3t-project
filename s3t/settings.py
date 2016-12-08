@@ -28,6 +28,10 @@ SECRET_KEY = 'b%3t75pnwv)l6ab$$(q6-s+01+i&c!ic5*8adap3lhl)_m4&-a'
 ALLOWED_HOSTS = ['*']
 
 # Application definition
+ADMINS = (
+    ('admin', 'bichocj@gmail.com'),
+)
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -144,7 +148,6 @@ LOGIN_REDIRECT_URL = '/'
 DEFAULT_EMAIL = "junior.yc9@gmail.com"
 FROM_NAME = "Junior"
 FROM_EMAIL = "junior.yc9@gmail.com"
-SENDGRID_KEY = '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'
 
 
 EMAIL_SUBJECT_ORDER = 'JUNIOR SAC - Orden de Pedido'
