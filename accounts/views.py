@@ -105,7 +105,7 @@ def logout_view(request):
     return redirect(LOGIN_REDIRECT_URL)
 
 
-def set_password_view(request, token):
+def set_password_view(request, uidb64, token):
     title = _('Update Password')
     person = get_object_or_404(Person, token=token)
 
