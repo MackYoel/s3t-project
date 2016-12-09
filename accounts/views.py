@@ -57,17 +57,21 @@ def password_reset(request):
         if form.is_valid():
             try:
                 email = form.cleaned_data["email"]
-                user = User.objects.get(email__iexact=email)
+                person = Person.objects.get(email__iexact=email)
+                token = default_token_generator.make_token(person)
                 context = {
-                    'email': user.email,
+                    'email': person.email,
                     'domain': domain,
                     'site_name': site_name,
-                    'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-                    'user': user,
-                    'token': default_token_generator.make_token(user),
+                    'uid': urlsafe_base64_encode(force_bytes(person.pk)),
+                    'user': person,
+                    'token': token,
                     'protocol': 'https' if request.is_secure() else 'http',
                     'main_email': contact_email,
                 }
+
+                person.token = token
+                person.save()
 
                 text_content = get_template('accounts/email/email_reset.html').render(context)
                 html_content = get_template('accounts/email/email_reset.html').render(context)
@@ -105,7 +109,7 @@ def logout_view(request):
     return redirect(LOGIN_REDIRECT_URL)
 
 
-def set_password_view(request, uidb64, token):
+def set_password_view(request, token):
     title = _('Update Password')
     person = get_object_or_404(Person, token=token)
 
