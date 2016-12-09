@@ -84,22 +84,28 @@ def order_list(request):
 
 @login_required()
 def order_edit(request, pk):
-
     order = get_object_or_404(Order, pk=pk, provider=request.user)
     title = 'Pedido'
     comeback_to = 'providers:order_list'
     order_items = OrderItem.objects.filter(order=order)
 
-    if order.state == order.PENDING:
+    if order.state == order.PENDING or order.state == order.ACCEPTED:
         save_text = 'Enviar a Junior'
         form_title = 'Transporte'
         if request.POST:
-            form = OrderProviderForm(request.POST, instance=order)
-            if form.is_valid():
-                order = form.save(commit=False)
-                order.sent_at = datetime.now()
-                order.state = Order.SENT
+            acept_reject = request.POST.get('acept_reject', None)
+            if acept_reject:
+                order.state = acept_reject
+                order.accepted_at = datetime.now()
                 order.save()
+                return redirect(reverse('providers:order_edit', args=(order.pk,)))
+            else:
+                form = OrderProviderForm(request.POST, instance=order)
+                if form.is_valid():
+                    order = form.save(commit=False)
+                    order.sent_at = datetime.now()
+                    order.state = Order.SENT
+                    order.save()
         else:
             form = OrderProviderForm(instance=order)
 

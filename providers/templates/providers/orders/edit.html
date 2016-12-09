@@ -9,15 +9,40 @@
 
         {% include 'main/orders/products.html' with order=order %}
 
-        {% if order.sent_at %}
-            {% include 'main/orders/transport.html' with order=order %}
-        {% else %}
+        {% if order.state == 6 %}
+            <div class="panel panel-info">
+                <div class="panel-heading">Estado</div>
+                <div class="panel-body">
+                    <form action=".">
+                        Pedido Rechazado
+                    </form>
+                </div>
+            </div>
+        {% endif %}
+        {% if order.state == 0 %}
             <div class="panel panel-info">
                 <div class="panel-heading">{{form_title}}</div>
                 <div class="panel-body">
-                    {% include 'hook/form.html' with form=form %}
+                    <form action="." method="post">
+                        {% csrf_token %}
+                        <button type="submit" name="acept_reject" value="6" class="btn btn-danger">Rechazar Pedido</button>
+                        <button type="submit" name="acept_reject" value="5" class="btn btn-primary">Aceptar Pedido</button>
+                    </form>
                 </div>
             </div>
+        {% endif %}
+
+        {% if order.sent_at %}
+            {% include 'main/orders/transport.html' with order=order %}
+        {% else %}
+            {% if order.state == 5 %}
+                <div class="panel panel-info">
+                    <div class="panel-heading">{{form_title}}</div>
+                    <div class="panel-body">
+                        {% include 'hook/form.html' with form=form %}
+                    </div>
+                </div>
+            {% endif %}
         {% endif %}
 
         {% include 'main/orders/pay.html' with order=order %}

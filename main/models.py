@@ -38,8 +38,13 @@ class Order(models.Model):
     CHECKED = 3
     PAID = 4
 
+    ACCEPTED = 5
+    REJECTED = 6
+
     ORDER_STATES = (
         (PENDING, 'Pendiente de atención'),
+        (ACCEPTED, 'Pedido aceptado'),
+        (REJECTED, 'Pedido rechazado'),
         (SENT, 'Enviado por el proveedor'),
         (RECEIVED, 'Recibido por el cliente'),
         (CHECKED, 'Revisado por el cliente'),
@@ -60,6 +65,7 @@ class Order(models.Model):
 
     note_received = models.TextField(null=True, blank=True)
 
+    accepted_at = models.DateTimeField(_("accepted at"), null=True, blank=True)
     sent_at = models.DateTimeField(_("sent at"), null=True, blank=True)
     received_at = models.DateTimeField(_("received at"), null=True, blank=True)
     checked_at = models.DateTimeField(_("checked at"), null=True, blank=True)

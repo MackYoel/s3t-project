@@ -18,6 +18,12 @@
             <td>{{order.paid_at}}</td>
         </tr>
         {% endif %}
+        {% if order.accepted_at %}
+        <tr>
+            <td>{% if order.state == 6 %} Rechazado {% else %} Aceptado {% endif %} por el proveedor</td>
+            <td>{{order.accepted_at}}</td>
+        </tr>
+        {% endif %}
         {% if order.checked_at %}
         <tr>
             <td>Revisado por el cliente</td>
