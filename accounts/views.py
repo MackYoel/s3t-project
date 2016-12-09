@@ -75,7 +75,7 @@ def password_reset(request):
                 subject = loader.render_to_string('registration/password_reset_subject.txt', context)
                 subject = ''.join(subject.splitlines())
 
-                send_email(FROM_NAME, DEFAULT_EMAIL, email, subject, text_content, html_content)
+                send_email(from_name = FROM_NAME, from_email =DEFAULT_EMAIL,to_email =email, subject=subject, content= html_content)
                 return HttpResponseRedirect('/accounts/message/password_reset/')
 
             except User.DoesNotExist:
