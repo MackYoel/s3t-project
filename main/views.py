@@ -271,6 +271,10 @@ def order_edit(request, pk):
             total_paid = Payment.objects.filter(order=order).aggregate(total_amount=Sum('amount'))
             if total_paid:
                 total_paid = total_paid['total_amount']
+                try:
+                    total_paid = float(total_paid)
+                except:
+                    total_paid = 0
             else:
                 total_paid = 0
 
