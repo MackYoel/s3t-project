@@ -62,13 +62,13 @@ def product_new(request):
 def product_edit(request, pk):
     product = get_object_or_404(Product, pk=int(pk))
     title = 'Editar Producto'
-    comeback_to = 'products'
+    comeback_to = 'providers:product_list'
 
     if request.method == 'POST' and request.POST:
-        form = ProductForm(request.POST, instance=product)
+        form = ProductForm(request.POST, request.FILES, instance=product)
         if form.is_valid():
             form.save()
-            return redirect(reverse('products'))
+            return redirect(reverse('providers:product_list'))
         else:
             return render(request, 'hook/form_layout.html', locals())
 

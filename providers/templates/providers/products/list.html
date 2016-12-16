@@ -30,7 +30,7 @@
         {% else %}
         <td>No</td>
         {% endif %}
-        <td>{{p.image}}</td>
+        <td>{% if p.image %} <a href="{{p.image.url}}" target="_blank">ver</a> {% endif %}</td>
         <td>{{p.name}}</td>
         <td>{{p.size}}</td>
         <td>{{p.get_colors|default:"--"}}</td>
