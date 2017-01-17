@@ -39,7 +39,7 @@ def product_new(request):
     comeback_to = 'providers:product_list'
     if request.method == 'POST' and request.POST:
         # pdb.set_trace()
-        form = ProductForm(request.POST)
+        form = ProductForm(request.POST, request.FILES)
         if form.is_valid():
             product = form.save(commit=False)
             product.provider = request.user.person
