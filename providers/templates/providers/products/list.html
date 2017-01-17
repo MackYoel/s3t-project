@@ -30,7 +30,17 @@
         {% else %}
         <td>No</td>
         {% endif %}
-        <td>{% if p.image %} <a href="{{p.image.url}}" target="_blank">ver</a> {% endif %}</td>
+        <td>
+            {% if p.image %}
+            <button type="button" class="btn btn-primary fire-modal" data-toggle="modal"
+                    data-target=".bs-example-modal-lg" data-image="{{p.image.url}}"
+                    data-title="{{p.name}}">
+                Ver
+            </button>
+            {% endif %}
+
+
+        </td>
         <td>{{p.name}}</td>
         <td>{{p.size}}</td>
         <td>{{p.get_colors|default:"--"}}</td>

@@ -19,7 +19,15 @@
         {% for p in order_items %}
         <tr product-pk="{{p.pk}}">
             <th scope="row">{{ forloop.counter }}</th>
-            <td>{{p.product.image}}</td>
+            <td>
+                {% if p.product.image %}
+                <button type="button" class="btn btn-primary fire-modal" data-toggle="modal"
+                        data-target=".bs-example-modal-lg" data-image="{{p.product.image.url}}"
+                        data-title="{{p.product.name}}">
+                    Ver
+                </button>
+                {% endif %}
+            </td>
             <td class="product_name">{{p.product.name}}</td>
             <td>{{p.product.size}}</td>
             <td>{{p.product.get_colors|default:"--"}}</td>
