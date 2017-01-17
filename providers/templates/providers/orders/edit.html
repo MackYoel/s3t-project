@@ -45,7 +45,8 @@
             {% endif %}
         {% endif %}
 
-        {% include 'main/orders/pay.html' with order=order %}
+
+        {% include 'main/orders/pay.html' with payments=payments total_paid=total_paid %}
 
         {% include 'main/orders/history.html' with order=order %}
     </div>

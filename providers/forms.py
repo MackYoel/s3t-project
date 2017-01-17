@@ -37,7 +37,7 @@ class OrderProviderForm(ModelForm):
         labels = {
             'code': 'Numero de guia *',
             'transport_name': 'Empresa de Transporte *',
-            'note': 'Nota *',
+            'note': 'Detalle de Empaque *',
         }
         update_form_labels(self, labels)
         add_form_required(self.fields)

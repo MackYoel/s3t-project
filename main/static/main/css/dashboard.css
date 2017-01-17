@@ -114,3 +114,11 @@ body {
   display: inline-block;
   border-radius: 50%;
 }
+
+.image-preview{
+  max-width : 850px;
+}
+
+.modal-content{
+    text-align: center;
+}

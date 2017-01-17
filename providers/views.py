@@ -3,13 +3,14 @@
 from datetime import datetime
 
 from django.contrib.auth.decorators import login_required
+from django.db.models import Sum
 from django.shortcuts import redirect, get_object_or_404
 from django.shortcuts import render
 from django.urls import reverse
 
 from accounts.models import Person
 from .forms import ProductForm, OrderProviderForm
-from main.models import Product, Order, OrderItem
+from main.models import Product, Order, OrderItem, Payment
 
 
 @login_required()
@@ -108,5 +109,16 @@ def order_edit(request, pk):
                     order.save()
         else:
             form = OrderProviderForm(instance=order)
+
+    payments = Payment.objects.filter(order=order)
+    total_paid = Payment.objects.filter(order=order).aggregate(total_amount=Sum('amount'))
+    if total_paid:
+        total_paid = total_paid['total_amount']
+        try:
+            total_paid = float(total_paid)
+        except:
+            total_paid = 0
+    else:
+        total_paid = 0
 
     return render(request, 'providers/orders/edit.html', locals())

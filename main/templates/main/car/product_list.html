@@ -32,6 +32,7 @@
                 <th>Talla</th>
                 <th>Colores</th>
                 <th>Precio</th>
+                <th>Proveedor</th>
                 <th>Acciones</th>
             </tr>
             </thead>
@@ -44,11 +45,19 @@
                 {% else %}
                 <td>No</td>
                 {% endif %}
-                <td>{{p.image}}</td>
+                <td>
+                    {% if p.image %}
+                    <button type="button" class="btn btn-primary fire-modal" data-toggle="modal"
+                            data-target=".bs-example-modal-lg" data-image="{{p.image.url}}" data-title="{{p.name}}">Ver
+                    </button>
+                    {% endif %}
+
+                </td>
                 <td class="product_name">{{p.name}}</td>
                 <td>{{p.size}}</td>
                 <td>{{p.get_colors|default:"--"}}</td>
                 <td>{{p.price}}</td>
+                <td>{{p.provider.get_full_name}}</td>
                 <td>
                     <button type="button" class="btn btn-link add_car">agregar+</button>
                 </td>
@@ -69,6 +78,22 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Modal title</h4>
+            </div>
+            <div class="modal-body">
+                <img class="img-rounded image-preview">
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock %}
 {% block extra_scripts %}
 <script src="{% static 'main/js/car.js' %}"></script>
